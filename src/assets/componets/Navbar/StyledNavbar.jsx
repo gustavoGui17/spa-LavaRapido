@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components'
 
-
 const StyleHeader = styled.header`
   width: 100%;
   height: 100px;
@@ -56,14 +55,6 @@ const StyleNav = styled.nav`
   }
 `;
 
-// const StyleBanner = styled.section`
-//   width: 100%;
-//   height: 80vh;
-//   /* background-image: url(${logo}); */
-//   background-size: cover;
-//   background-position: center;
-// `;
-
 const Hamburger = styled.div`
   display: none;
   cursor: pointer;
@@ -82,26 +73,25 @@ const Hamburger = styled.div`
 `;
 
 export default function StyledNavbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    return (
-        <>
-            <StyleHeader>
-                <Hamburger onClick={() => setMenuOpen(!menuOpen)}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </Hamburger>
-                <StyleNav open={menuOpen}>
-                    <ul>
-                        <a href="#Home">Home</a><br />
-                        <a href="#Valores">Valores</a><br />
-                        <a href="#Sobre nós">Sobre nós</a><br />
-                        <a href="#Login">Login</a>
-                    </ul>
-                </StyleNav>
-            </StyleHeader>
-            {/* <StyleBanner /> */}
-        </>
-    );
+  return (
+    <>
+      <StyleHeader>
+        <Hamburger onClick={() => setMenuOpen(!menuOpen)}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </Hamburger>
+        <StyleNav open={menuOpen}>
+          <ul>
+            <a href="#Home">Home</a><br />
+            <a href="#Valores">Valores</a><br />
+            <a href="#Sobre nós">Sobre nós</a><br />
+            <a href="#Login">Login</a>
+          </ul>
+        </StyleNav>
+      </StyleHeader>
+    </>
+  );
 }
