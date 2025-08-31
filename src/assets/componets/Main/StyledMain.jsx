@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import image from "../../img/image.png"
+import StyledCarDetaling from "./StyledCarDetaling";
 
 const StyledContainer = styled.section`
   display: flex;
@@ -68,7 +69,7 @@ export default function StyledMain() {
             </StyledImage>
 
             <StyledContent>
-                <StyledTitle>About EnriCar</StyledTitle>
+                <StyledTitle>Sobre EnriCar</StyledTitle>
                 <StyledSubtitle>Lavagem manual e detalhamento de carros</StyledSubtitle>
 
                 <Styledtext>Bem-vindo à EnriCar, onde redefinimos a arte de cuidar de carros <br /> com nossos serviços incomparáveis de lavagem manual. Na EnriCar, <br /> acreditamos em mais do que apenas limpar veículos; acreditamos em <br /> realçar e preservar sua beleza, um detalhe meticuloso de cada vez.
@@ -86,7 +87,6 @@ export default function StyledMain() {
                     <p>📞 +61 433 457 269</p>
                     <p>📧 washmasterelizabeth@gmail.com</p>
                 </StyledContact>
-
             </StyledContent>
         </StyledContainer>
     )
