@@ -22,6 +22,11 @@ const StyledImage = styled.div`
     height: auto;
     border-radius: 8px;
     object-fit: cover;
+    transition: transform 0.6s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 `
 

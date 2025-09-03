@@ -1,18 +1,18 @@
 import styled from "styled-components"
 
-const Section = styled.section`
+const StyledSection = styled.section`
   padding: 60px 40px;
   text-align: center;
   background: #fff;
 `;
 
-const Title = styled.h2`
+const StyledTitle = styled.h2`
   font-size: 26px;
   font-weight: bold;
   margin-bottom: 40px;
 `;
 
-const Grid = styled.div`
+const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
@@ -26,7 +26,7 @@ const Grid = styled.div`
   }
 `;
 
-const Card = styled.div`
+const StyledCard = styled.div`
   display: flex;
   align-items: flex-start;
   text-align: left;
@@ -39,7 +39,7 @@ const Icon = styled.span`
   color: black;
 `;
 
-const Content = styled.div`
+const StyledContent = styled.div`
   h3 {
     font-size: 18px;
     font-weight: bold;
@@ -82,19 +82,19 @@ export default function StyledCarDetaling() {
   ];
 
   return (
-    <Section>
-      <Title>Carro detalhado em Osasco | Enricar</Title>
-      <Grid>
+    <StyledSection>
+      <StyledTitle>Carro detalhado em Osasco | Enricar</StyledTitle>
+      <StyledGrid>
         {features.map((feature, index) => (
-          <Card key={index}>
+          <StyledCard key={index}>
             <Icon>│</Icon>
-            <Content>
+            <StyledContent>
               <h3>{feature.title}</h3>
               <p>{feature.text}</p>
-            </Content>
-          </Card>
+            </StyledContent>
+          </StyledCard>
         ))}
-      </Grid>
-    </Section>
+      </StyledGrid>
+    </StyledSection>
   );
 }
