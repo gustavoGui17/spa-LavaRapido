@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import image from "../../img/image.png"
-import StyledCarDetaling from "./StyledCarDetaling";
 
 const StyledContainer = styled.section`
   display: flex;

@@ -4,6 +4,7 @@ import StyledPricing from "../../componets/Cards/StyledPricing";
 import StyledMain from "../../componets/Main/StyledMain";
 import StyledCarDetaling from "../../componets/Main/StyledCarDetaling";
 import StyledGallery from "../../componets/Gallery/StyledGallery";
+import StyledMaps from "../../componets/Maps/StyledMaps";
 
 export default function Home(){
     return (
@@ -14,6 +15,7 @@ export default function Home(){
             <StyledMain/>
             <StyledCarDetaling/>
             <StyledGallery/>
+            <StyledMaps/>
         </div>
     )
 }
