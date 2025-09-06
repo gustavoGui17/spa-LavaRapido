@@ -88,6 +88,7 @@ export default function StyledNavbar() {
             <a href="#Home">Home</a><br />
             <a href="#Valores">Valores</a><br />
             <a href="#Sobre nós">Sobre nós</a><br />
+            <a href="#Galeria">Galeria</a><br />
             <a href="#Login">Login</a>
           </ul>
         </StyleNav>

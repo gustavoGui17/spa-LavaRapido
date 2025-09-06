@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import img1 from "../../img/Gallery/Property 1=Frame 30.png"
-import img2 from "../../img/Gallery/Property 1=Frame 31.png"
-import img3 from "../../img/Gallery/Property 1=Frame 32.png"
-import img4 from "../../img/Gallery/Property 1=Frame 33.png"
-import img5 from "../../img/Gallery/Property 1=Frame 34.png"
-import img6 from "../../img/Gallery/Property 1=Frame 35.png"
-import img7 from "../../img/Gallery/Property 1=Frame 36.png"
-import img8 from "../../img/Gallery/Property 1=Frame 37.png"
+import img1 from "../../../img/Gallery/Property 1=Frame 31.png"
+import img2 from "../../../img/Gallery/Property 1=Frame 31.png"
+import img3 from "../../../img/Gallery/Property 1=Frame 32.png"
+import img4 from "../../../img/Gallery/Property 1=Frame 33.png"
+import img5 from "../../../img/Gallery/Property 1=Frame 34.png"
+import img6 from "../../../img/Gallery/Property 1=Frame 35.png"
+import img7 from "../../../img/Gallery/Property 1=Frame 36.png"
+import img8 from "../../../img/Gallery/Property 1=Frame 37.png"
 
 const StyledSection = styled.section`
   padding: 60px 40px;

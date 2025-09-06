@@ -5,7 +5,7 @@ const StyleCardWrapper = styled.div`
   background-color: ${({ bg }) => bg || '#fff'};
   padding: 20px;
   border-radius: 15px;
-  color: #000;
+  color: #ffffff;
   width: 300px;
   margin: 20px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -16,7 +16,7 @@ const StyleCardWrapper = styled.div`
 
 const StyleTag = styled.div`
   background: white;
-  color: #060432;
+  color: #000000;
   padding: 6px 14px;
   font-weight: bold;
   border-radius: 30px;
@@ -45,22 +45,6 @@ const StyleListItem = styled.li`
   font-size: 15px;
 `;
 
-const StyleButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: auto;
-`;
-
-const StyleButton = styled.button`
-  padding: 8px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #f0f0f0;
-`;
-
 const StyledCar = styled.p`
 font-size: 13px;
 margin-top: 25px;
@@ -82,9 +66,6 @@ export default function PricingCard({ title, car, bgColor, price, washing, servi
           <StyleListItem key={index}>✅ {item}</StyleListItem>
         ))}
       </StyleList>
-      <StyleButtonGroup>
-        <StyleButton>🛒 Compre agora</StyleButton>
-      </StyleButtonGroup>
     </StyleCardWrapper>
   );
 }

@@ -68,7 +68,7 @@ export default function StyledPricing() {
 ];
 
   return (
-    <StyleSection>
+    <StyleSection id='Valores'>
       <h2>Preços</h2>
       <p>
         Confira abaixo os preços dos nossos serviços.

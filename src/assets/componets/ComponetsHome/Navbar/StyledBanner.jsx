@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import logo from '../../img/logo.jpg';
+import logo from '../../../img/logo.jpg';
 
 const StyleBanner = styled.section`
   width: 100%;

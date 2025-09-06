@@ -82,7 +82,7 @@ export default function StyledCarDetaling() {
   ];
 
   return (
-    <StyledSection>
+    <StyledSection id="Galeria">
       <StyledTitle>Carro detalhado em Osasco | Enricar</StyledTitle>
       <StyledGrid>
         {features.map((feature, index) => (

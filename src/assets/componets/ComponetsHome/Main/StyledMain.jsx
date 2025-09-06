@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import image from "../../img/image.png"
+import image from "../../../img/image.png"
 
 const StyledContainer = styled.section`
   display: flex;
@@ -67,7 +67,7 @@ const StyledContact = styled.div`
 
 export default function StyledMain() {
     return (
-        <StyledContainer>
+        <StyledContainer id="Sobre nós">
             <StyledImage>
                 <img src={image} alt="Enricar" />
             </StyledImage>
