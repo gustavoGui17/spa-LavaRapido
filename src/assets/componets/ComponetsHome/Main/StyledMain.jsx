@@ -67,7 +67,7 @@ const StyledContact = styled.div`
 
 export default function StyledMain() {
     return (
-        <StyledContainer id="Sobre nós">
+        <StyledContainer id="SobreNos">
             <StyledImage>
                 <img src={image} alt="Enricar" />
             </StyledImage>

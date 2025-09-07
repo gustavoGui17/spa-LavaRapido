@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import styled from 'styled-components'
+import { Link } from "react-router-dom";
 
 const StyleHeader = styled.header`
   width: 100%;
-  height: 100px;
+  height: 60px;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
-  background-color: black;
+  background-color: #111;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -41,10 +42,24 @@ const StyleNav = styled.nav`
 
   a {
     text-decoration: none;
-    color: white;
+    color: #fff;
     font-size: 16px;
     padding: 20px 30px;
-    text-transform: uppercase;
+  }
+
+    a::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: -1px;
+    background-color: #4facfe; /* azul neon */
+    transition: width 0.3s;
+  }
+
+  a:hover::after {
+    width: 100%;
   }
 
   a:hover,
@@ -85,11 +100,11 @@ export default function StyledNavbar() {
         </Hamburger>
         <StyleNav open={menuOpen}>
           <ul>
-            <a href="#Home">Home</a><br />
-            <a href="#Valores">Valores</a><br />
-            <a href="#Sobre nós">Sobre nós</a><br />
-            <a href="#Galeria">Galeria</a><br />
-            <a href="#Login">Login</a>
+            <Link to="/home#Home">Home</Link><br />
+            <Link to="/home#Valores">Valores</Link><br />
+            <Link to="/home#SobreNos">Sobre nós</Link><br />
+            <Link to="/home#Galeria">Galeria</Link><br />
+            <Link to="/login">Login</Link>
           </ul>
         </StyleNav>
       </StyleHeader>
