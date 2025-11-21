@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import Home from './assets/pages/Home/Home'
 import Login from './assets/pages/Login/Login';
+import Dashbord from "./assets/pages/Dashbord/Dashbord";
 
 function ScrollToHashElement() {
   const { pathname, hash } = useLocation();
@@ -53,6 +54,15 @@ function AnimatedRoutes() {
           element={
             <MotionPage from={50}>
               <Login />
+            </MotionPage>
+          }
+        />
+
+        <Route
+          path="/Dashbord"
+          element={
+            <MotionPage from={50}>
+              <Dashbord />
             </MotionPage>
           }
         />

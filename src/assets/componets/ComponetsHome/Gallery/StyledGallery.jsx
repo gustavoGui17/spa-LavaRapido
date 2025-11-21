@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import img1 from "../../../img/Gallery/Property 1=Frame 31.png"
+import img1 from "../../../img/Gallery/Property 1=Frame 30.png"
 import img2 from "../../../img/Gallery/Property 1=Frame 31.png"
 import img3 from "../../../img/Gallery/Property 1=Frame 32.png"
 import img4 from "../../../img/Gallery/Property 1=Frame 33.png"
