@@ -90,7 +90,7 @@ export default function StyledNavbarDash() {
       <StyledTop>
         <div>
           <h2>
-            NO COFFEE <span className="danger">NO CODE</span>
+            Enri <span className="danger">car</span>
           </h2>
         </div>
 

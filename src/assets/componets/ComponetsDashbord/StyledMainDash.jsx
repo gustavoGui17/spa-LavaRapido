@@ -1,10 +1,13 @@
+import { useEffect, useState } from "react";
+import { listarVeiculos } from "../../services/veiculoService";
 import styled from "styled-components";
+import ModalVeiculos from "./StyledModal";
 
-export const StyledMain = styled.main`
+const StyledMain = styled.main`
   margin-top: 1.4rem;
 `;
 
-export const StyledDate = styled.div`
+const StyledDate = styled.div`
   display: inline-block;
   background: var(--color-light);
   border-radius: var(--border-radius-1);
@@ -17,13 +20,13 @@ export const StyledDate = styled.div`
   }
 `;
 
-export const StyledInsights = styled.div`
+const StyledInsights = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.6rem;
 `;
 
-export const InsightCard = styled.div`
+const InsightCard = styled.div`
   background: var(--color-white);
   padding: var(--card-padding);
   border-radius: var(--card-border-radius);
@@ -37,9 +40,9 @@ export const InsightCard = styled.div`
 
   span {
     background: ${(props) =>
-      props.type === "despesas"
-        ? "var(--color-danger)"
-        : props.type === "rendimento"
+    props.type === "despesas"
+      ? "var(--color-danger)"
+      : props.type === "rendimento"
         ? "var(--color-success)"
         : "var(--color-primary)"};
     padding: 0.5rem;
@@ -77,24 +80,23 @@ export const InsightCard = styled.div`
       stroke-linecap: round;
       transform: translate(5px, 5px);
 
-      /* Ajustes individuais */
       ${({ type }) =>
-        type === "investimento" &&
-        `
+    type === "investimento" &&
+    `
           stroke-dashoffset: -30;
           stroke-dasharray: 200;
       `}
 
       ${({ type }) =>
-        type === "despesas" &&
-        `
+    type === "despesas" &&
+    `
           stroke-dashoffset: 20;
           stroke-dasharray: 80;
       `}
 
       ${({ type }) =>
-        type === "rendimento" &&
-        `
+    type === "rendimento" &&
+    `
           stroke-dashoffset: 35;
           stroke-dasharray: 110;
       `}
@@ -119,6 +121,19 @@ export const InsightCard = styled.div`
 `;
 
 export default function StyledMainDash() {
+  const [openModal, setOpenModal] = useState(false);
+
+  const [veiculos, setVeiculos] = useState([]);
+
+  async function carregarVeiculos() {
+    const data = await listarVeiculos();
+    setVeiculos(data);
+  }
+
+  useEffect(() => {
+    carregarVeiculos();
+  }, []);
+
   return (
     <StyledMain>
       <h1>Dashboard</h1>
@@ -128,12 +143,15 @@ export default function StyledMainDash() {
       </StyledDate>
 
       <StyledInsights>
-        <InsightCard type="investimento">
+        <InsightCard
+          type="totalDeVeiculos"
+          onClick={() => setOpenModal(true)}
+        >
           <span className="material-symbols-outlined">trending_up</span>
           <div className="middle">
             <div className="left">
-              <h3>Total investido</h3>
-              <h1>R$ 0,00</h1>
+              <h3>Total de veiculos</h3>
+              <h1>{veiculos.length}</h1>
             </div>
 
             <div className="progress">
@@ -148,12 +166,11 @@ export default function StyledMainDash() {
           <small>last 24 horas</small>
         </InsightCard>
 
-        <InsightCard type="despesas">
+        <InsightCard type="totalDeVeiculoLimpando">
           <span className="material-symbols-outlined">bar_chart</span>
           <div className="middle">
             <div className="left">
-              <h3>Total de despesas</h3>
-              <h1>R$ 0,00</h1>
+              <h3>Veiculos limpando</h3>
             </div>
 
             <div className="progress">
@@ -168,12 +185,11 @@ export default function StyledMainDash() {
           <small>last 24 horas</small>
         </InsightCard>
 
-        <InsightCard type="rendimento">
+        <InsightCard type="veiculosFinalizados">
           <span className="material-symbols-outlined">stacked_line_chart</span>
           <div className="middle">
             <div className="left">
-              <h3>Total de renda</h3>
-              <h1>R$ 0,00</h1>
+              <h3>Veiculos finalizados</h3>
             </div>
 
             <div className="progress">
@@ -188,6 +204,12 @@ export default function StyledMainDash() {
           <small>last 24 horas</small>
         </InsightCard>
       </StyledInsights>
+      
+      <ModalVeiculos
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSuccess={carregarVeiculos}
+      />
     </StyledMain>
   );
 }
