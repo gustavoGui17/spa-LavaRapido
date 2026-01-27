@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { ProtectedRoute } from "./route/ProtectRoute";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 
@@ -58,16 +59,14 @@ function AnimatedRoutes() {
           }
         />
 
-        <Route
-          path="/Dashbord"
-          element={
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
             <MotionPage from={50}>
               <Dashbord />
             </MotionPage>
-          }
-        />
+          </ProtectedRoute>
+        } />
 
-        {/* fallback para qualquer rota desconhecida */}
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </AnimatePresence>

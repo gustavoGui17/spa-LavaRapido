@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; 
+import { loginUsuario} from "../../services/authService";
+import { cadastrarUsuario } from "../../services/userService";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -67,22 +70,38 @@ const StyledToggleText = styled.p`
 
 export default function StyledLogin() {
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
-    senha: "",
+    password: "",
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      console.log("Login com:", formData.email, formData.senha);
-    } else {
-      console.log("Cadastro com:", formData.nome, formData.email, formData.senha);
+    try {
+      if (isLogin) {
+        const data = await loginUsuario({
+          email: formData.email,
+          password: formData.password
+        });
+        
+        localStorage.setItem("token", data.token);
+        
+        alert("Login realizado com sucesso!");
+        navigate("/dashboard");
+      } else {
+        await cadastrarUsuario(formData);
+        alert("Cadastro realizado! Agora faça o login.");
+        setIsLogin(true); 
+      }
+    } catch (error) {
+      console.error("Erro na autenticação:", error);
+      alert(error.response?.data?.message || "Erro ao processar requisição");
     }
   };
 
@@ -98,6 +117,7 @@ export default function StyledLogin() {
               placeholder="Nome"
               value={formData.nome}
               onChange={handleChange}
+              required
             />
           )}
           <StyledInput
@@ -110,9 +130,9 @@ export default function StyledLogin() {
           />
           <StyledInput
             type="password"
-            name="senha"
+            name="password"
             placeholder="Senha"
-            value={formData.senha}
+            value={formData.password}
             onChange={handleChange}
             required
           />

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { listarVeiculos } from "../../services/veiculoService";
+import { listarVeiculos, atualizarVeiculo, deletarVeiculo } from "../../services/veiculoService";
 import styled from "styled-components";
 import ModalVeiculos from "./StyledModal";
+import StyledHistory from "./StyledHistory";
 
 const StyledMain = styled.main`
   margin-top: 1.4rem;
@@ -122,89 +123,101 @@ const InsightCard = styled.div`
 
 export default function StyledMainDash() {
   const [openModal, setOpenModal] = useState(false);
-
   const [veiculos, setVeiculos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   async function carregarVeiculos() {
-    const data = await listarVeiculos();
-    setVeiculos(data);
+    try {
+      setLoading(true);
+      const response = await listarVeiculos();
+      setVeiculos(response?.results ?? response ?? []);
+    } catch (error) {
+      console.error("Erro ao carregar veículos", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDeletar(id) {
+    if (window.confirm("Tem certeza que deseja remover este veículo?")) {
+      try {
+        await deletarVeiculo(id);
+        await carregarVeiculos();
+      } catch (err) {
+        alert("Erro ao deletar veículo", err);
+      }
+    }
+  }
+
+  async function handleProximoStatus(veiculo) {
+    const fluxo = ["pendente", "em atendimento", "finalizado"];
+    const prox = fluxo[fluxo.indexOf(veiculo.status) + 1];
+    if (prox) {
+      try {
+        await atualizarVeiculo(veiculo._id, { status: prox });
+        carregarVeiculos();
+      } catch (err) { alert("Erro ao atualizar", err); }
+    }
   }
 
   useEffect(() => {
     carregarVeiculos();
   }, []);
 
+  const totalVeiculos = veiculos?.length ?? 0;
+
+  const veiculosEmProducao = veiculos?.filter(
+    (v) => v.status === "em atendimento"
+  )?.length ?? 0;
+
+  const veiculosFinalizados = veiculos?.filter(
+    (v) => v.status === "finalizado"
+  )?.length ?? 0;
+
   return (
     <StyledMain>
       <h1>Dashboard</h1>
-
-      <StyledDate>
-        <input type="date" />
-      </StyledDate>
-
       <StyledInsights>
-        <InsightCard
-          type="totalDeVeiculos"
-          onClick={() => setOpenModal(true)}
-        >
+        <InsightCard type="totalDeVeiculos" onClick={() => setOpenModal(true)}>
           <span className="material-symbols-outlined">trending_up</span>
           <div className="middle">
             <div className="left">
-              <h3>Total de veiculos</h3>
-              <h1>{veiculos.length}</h1>
-            </div>
-
-            <div className="progress">
-              <svg>
-                <circle cx="38" cy="38" r="36" />
-              </svg>
-              <div className="number">
-                <p>81%</p>
-              </div>
+              <h3>Cadastrar veiculo</h3>
+              <h1>{loading ? "..." : totalVeiculos}</h1>
             </div>
           </div>
-          <small>last 24 horas</small>
+          <small>total de registros</small>
         </InsightCard>
 
         <InsightCard type="totalDeVeiculoLimpando">
-          <span className="material-symbols-outlined">bar_chart</span>
+          <span className="material-symbols-outlined">refresh</span>
           <div className="middle">
             <div className="left">
-              <h3>Veiculos limpando</h3>
-            </div>
-
-            <div className="progress">
-              <svg>
-                <circle cx="38" cy="38" r="36" />
-              </svg>
-              <div className="number">
-                <p>62%</p>
-              </div>
+              <h3>Veículos limpando</h3>
+              <h1>{loading ? "..." : veiculosEmProducao}</h1>
             </div>
           </div>
-          <small>last 24 horas</small>
+          <small>status: em atendimento</small>
         </InsightCard>
 
         <InsightCard type="veiculosFinalizados">
-          <span className="material-symbols-outlined">stacked_line_chart</span>
+          <span className="material-symbols-outlined">done_all</span>
           <div className="middle">
             <div className="left">
-              <h3>Veiculos finalizados</h3>
-            </div>
-
-            <div className="progress">
-              <svg>
-                <circle cx="38" cy="38" r="36" />
-              </svg>
-              <div className="number">
-                <p>44%</p>
-              </div>
+              <h3>Veículos finalizados</h3>
+              <h1>{loading ? "..." : veiculosFinalizados}</h1>
             </div>
           </div>
-          <small>last 24 horas</small>
+          <small>concluídos hoje</small>
         </InsightCard>
       </StyledInsights>
-      
+
+      <StyledHistory
+        items={veiculos}
+        onDelete={handleDeletar}
+        onUpdateStatus={handleProximoStatus}
+      />
+
       <ModalVeiculos
         open={openModal}
         onClose={() => setOpenModal(false)}

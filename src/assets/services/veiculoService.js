@@ -16,3 +16,13 @@ export const finalizarVeiculo = async (id) => {
   });
   return data;
 };
+
+export const atualizarVeiculo = async (id, dados) => {
+    const response = await api.put(`/veiculo/${id}`, dados);
+    return response.data;
+};
+
+export const deletarVeiculo = async (id) => {
+    const response = await api.delete(`/veiculo/${id}`);
+    return response.data;
+};

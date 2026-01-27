@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { criarVeiculo } from "../../services/veiculoService";
 import styled, { keyframes } from "styled-components";
+
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: scale(0.95); }
@@ -173,8 +175,12 @@ const Action = styled(Th)`
 
 export default function ModalVeiculos({ open, onClose, onSuccess }) {
   const [placa, setPlaca] = useState("");
-  const [tipoLavagem, setTipoLavagem] = useState("Lavagem simples");
-  const [total, setTotal] = useState("");
+  const [modelo, setModelo] = useState("");
+  const [cor, setCor] = useState("");
+  const [nomeCliente, setNomeCliente] = useState("");
+  const [contato, setContato] = useState("");
+  const [tipoLavagem, setTipoLavagem] = useState("simples"); // Valor exato do enum no back
+  // const [total, setTotal] = useState(""); // Nota: seu schema não tem 'total', considere adicionar lá depois
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -187,29 +193,43 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
   if (!open) return null;
 
   function handlePlacaMask(value) {
-    return value
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, "")
-      .slice(0, 7);
+    return value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
   }
 
   async function finalizarCadastro() {
-    if (!placa || !total) {
-      alert("Preencha todos os campos");
+    // Validação básica de campos obrigatórios do Schema
+    if (!placa || !modelo || !cor || !nomeCliente || !contato) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    await criarVeiculo({
-      placa,
-      tipoLavagem,
-      total: Number(total),
-    });
+    try {
+      const novoVeiculo = {
+        placa,
+        modelo,
+        cor,
+        tipoLavagem,
+        nomeCliente,
+        contato,
+        // O status e entryDate o back-end já define como default
+      };
 
-    onSuccess();
-    onClose();
-
-    setPlaca("");
-    setTotal("");
+      await criarVeiculo(novoVeiculo);
+      
+      alert("Veículo cadastrado com sucesso!");
+      onSuccess(); // Função para recarregar a lista na Dash
+      onClose();   // Fecha a modal
+      
+      // Limpa os campos
+      setPlaca("");
+      setModelo("");
+      setCor("");
+      setNomeCliente("");
+      setContato("");
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+      alert(error.response?.data?.message || "Erro ao conectar com o servidor");
+    }
   }
 
   return (
@@ -218,13 +238,37 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
         <StyledCloseButton onClick={onClose}>×</StyledCloseButton>
 
         <StyledModalContainer>
+          <h2>Cadastrar Novo Veículo</h2>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+            <div>
+              <h3>Placa</h3>
+              <StyledInput
+                value={placa}
+                onChange={(e) => setPlaca(handlePlacaMask(e.target.value))}
+                placeholder="ABC1D23"
+              />
+            </div>
+            <div>
+              <h3>Modelo</h3>
+              <StyledInput value={modelo} onChange={(e) => setModelo(e.target.value)} placeholder="Ex: Gol G7" />
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+            <div>
+              <h3>Cor</h3>
+              <StyledInput value={cor} onChange={(e) => setCor(e.target.value)} placeholder="Ex: Preto" />
+            </div>
+            <div>
+              <h3>Cliente</h3>
+              <StyledInput value={nomeCliente} onChange={(e) => setNomeCliente(e.target.value)} placeholder="Nome do dono" />
+            </div>
+          </div>
+
           <div>
-            <h3>Placa</h3>
-            <StyledInput
-              value={placa}
-              onChange={(e) => setPlaca(handlePlacaMask(e.target.value))}
-              placeholder="ABC1D23"
-            />
+            <h3>Contato (WhatsApp)</h3>
+            <StyledInput value={contato} onChange={(e) => setContato(e.target.value)} placeholder="(11) 99999-9999" />
           </div>
 
           <div>
@@ -233,22 +277,25 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
               value={tipoLavagem}
               onChange={(e) => setTipoLavagem(e.target.value)}
             >
-              <option>Lavagem simples</option>
-              <option>Lavagem basica</option>
-              <option>Lavagem premium</option>
+              <option value="simples">Lavagem Simples</option>
+              <option value="completa">Lavagem Completa</option>
+              <option value="premium">Lavagem Premium</option>
             </StyledSelect>
           </div>
 
-          <div>
-            <h3>Total</h3>
-            <StyledInput
-              type="number"
-              value={total}
-              onChange={(e) => setTotal(e.target.value)}
-            />
-          </div>
-
-          <button onClick={finalizarCadastro}>
+          <button 
+            onClick={finalizarCadastro}
+            style={{ 
+              marginTop: '20px', 
+              padding: '12px', 
+              backgroundColor: 'orange', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
             Finalizar Cadastro
           </button>
         </StyledModalContainer>
