@@ -1,8 +1,15 @@
 import api from "./api";
 
-export const listarVeiculos = async () => {
-  const { data } = await api.get("/veiculo");
-  return data.results;
+export const listarVeiculos = async ({ limit = 5, offset = 0, search = "" }) => {
+  const response = await api.get("/veiculo", {
+    params: {
+      limit,
+      offset,
+      search,
+    },
+  });
+
+  return response.data;
 };
 
 export const criarVeiculo = async (payload) => {

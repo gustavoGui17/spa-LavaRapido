@@ -1,128 +1,186 @@
 import styled from "styled-components";
-// import { listarVeiculos } from "../../services/veiculoService";
-// import { useEffect } from "react";
-// import { useState } from "react";
-
-const Title = styled.h2`
-  margin-bottom: 0.8rem;
-`;
 
 const Table = styled.table`
-  background: var(--color-white);
   width: 100%;
-  border-radius: var(--card-border-radius);
-  padding: 1rem;
-  box-shadow: var(--box-shadow);
-  transition: all 300ms ease;
   border-collapse: collapse;
-
-  &:hover {
-    box-shadow: none;
-  }
+  background: var(--color-white);
+  border-radius: var(--card-border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
 
   th {
     text-align: left;
-    padding: 12px;
-    color: var(--color-dark-variant);
+    padding: 14px 12px;
     font-size: 0.85rem;
+    color: var(--color-dark-variant);
     border-bottom: 1px solid #eee;
+    white-space: nowrap;
   }
 
   td {
-    padding: 12px;
+    padding: 14px 12px;
     border-bottom: 1px solid #eee;
     vertical-align: middle;
-    text-align: left; 
+    font-size: 0.9rem;
   }
-  
-   tbody tr:hover {
-    background-color: #f9f9f9;
+
+  th.status,
+  td.status,
+  th.actions,
+  td.actions {
+    text-align: center;
+  }
+
+  tbody tr:hover {
+    background: #f9f9f9;
   }
 `;
 
-const Status = styled.td`
-  color: ${(props) => (props.type === "Aprovado" ? "green" : "orange")};
-  font-weight: bold;
+const Status = styled.span`
+  font-weight: 600;
+  text-transform: capitalize;
+  color: ${({ value }) =>
+    value === "finalizado" ? "#2ecc71" : "#f39c12"};
 `;
 
-const LinkShowAll = styled.a`
-  display: block;
-  margin: 1rem auto;
-  text-align: center;
-  color: #4a77ff;
-  cursor: pointer;
+const Actions = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+
+    span {
+      font-size: 22px;
+    }
+  }
 `;
 
-export default function StyledHistory({ items = [], onDelete, onUpdateStatus }) {
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 1.5rem;
+
+  button {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    font-weight: 500;
+  }
+`;
+
+export default function StyledHistory({ items = [], onDelete, onUpdateStatus, totalPages, currentPage, onNextPage, onPrevPage }) {
   return (
-    <div>
-      <h2 style={{ marginBottom: '1rem' }}>Histórico de veículos</h2>
+    <>
+      <div>
+        <h2 style={{ marginBottom: "1rem" }}>Histórico de veículos</h2>
 
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th>Placa</th>
-            <th>Modelo</th>
-            <th>Cor</th>
-            <th>Tipo de lavagem</th>
-            <th>Cliente</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {items.length === 0 ? (
+        <Table>
+          <thead>
             <tr>
-              <td colSpan="7" style={{ textAlign: "center", padding: "40px" }}>
-                Nenhum registro encontrado
-              </td>
+              <th>Placa</th>
+              <th>Modelo</th>
+              <th>Cor</th>
+              <th>Tipo de lavagem</th>
+              <th>Cliente</th>
+              <th className="status">Status</th>
+              <th className="actions">Ações</th>
             </tr>
-          ) : (
-            items.map((item) => (
-              <tr key={item._id || item.id}>
-                <td>{item.placa}</td>
-                <td>{item.modelo}</td>
-                <td>{item.cor}</td>
-                <td>{item.tipoLavagem}</td>
-                <td>{item.nomeCliente}</td>
-                <td>
-                  {/* Note: Verifique se o status no banco é "em atendimento" ou "Em produção" */}
-                  <span style={{ 
-                    color: item.status === 'finalizado' ? 'green' : 'orange',
-                    fontWeight: 'bold' 
-                  }}>
-                    {item.status}
-                  </span>
-                </td>
-                <td>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    {/* Botão de Avançar Status */}
-                    {item.status !== "finalizado" && (
-                      <button 
-                        onClick={() => onUpdateStatus(item)}
-                        title="Avançar Status"
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#2ecc71' }}
-                      >
-                        <span className="material-symbols-outlined">play_circle</span>
-                      </button>
-                    )}
+          </thead>
 
-                    {/* Botão de Deletar */}
-                    <button 
-                      onClick={() => onDelete(item._id)}
-                      title="Excluir"
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#e74c3c' }}
-                    >
-                      <span className="material-symbols-outlined">delete</span>
-                    </button>
-                  </div>
+          <tbody>
+            {items.length === 0 ? (
+              <tr>
+                <td colSpan="7" style={{ textAlign: "center", padding: "40px" }}>
+                  Nenhum registro encontrado
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+            ) : (
+              items.map((item) => (
+                <tr key={item._id || item.id}>
+                  <td>{item.placa}</td>
+                  <td>{item.modelo}</td>
+                  <td>{item.cor}</td>
+                  <td>{item.tipoLavagem}</td>
+                  <td>{item.nomeCliente}</td>
+
+                  <td className="status">
+                    <Status value={item.status}>{item.status}</Status>
+                  </td>
+
+                  <td className="actions">
+                    <Actions>
+                      {item.status !== "finalizado" && (
+                        <button
+                          onClick={() => onUpdateStatus(item)}
+                          title="Avançar status"
+                        >
+                          <span
+                            className="material-symbols-outlined"
+                            style={{ color: "#2ecc71" }}
+                          >
+                            play_circle
+                          </span>
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => onDelete(item._id || item.id)}
+                        title="Excluir"
+                      >
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ color: "#e74c3c" }}
+                        >
+                          delete
+                        </span>
+                      </button>
+                    </Actions>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </Table>
+      </div>
+
+      {totalPages > 1 && (
+        <Pagination>
+          <button
+            onClick={onPrevPage}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </button>
+
+          <span>
+            Página {currentPage} de {totalPages}
+          </span>
+
+          <button
+            onClick={onNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Próxima
+          </button>
+        </Pagination>
+      )}
+    </>
+  )
 }

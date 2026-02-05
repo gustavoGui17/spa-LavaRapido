@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { listarVeiculos, atualizarVeiculo, deletarVeiculo } from "../../services/veiculoService";
 import styled from "styled-components";
 import ModalVeiculos from "./StyledModal";
@@ -125,23 +125,35 @@ export default function StyledMainDash() {
   const [openModal, setOpenModal] = useState(false);
   const [veiculos, setVeiculos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [limit] = useState(5);
+  const [offset, setOffset] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [search, setSearch] = useState("");
 
-  async function carregarVeiculos() {
+  const carregarVeiculos = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await listarVeiculos();
-      setVeiculos(response?.results ?? response ?? []);
+
+      const response = await listarVeiculos({
+        limit,
+        offset,
+        search
+      });
+
+      setVeiculos(response.results || []);
+      setTotal(response.total || 0);
+
     } catch (error) {
       console.error("Erro ao carregar veículos", error);
     } finally {
       setLoading(false);
     }
-  }
+  }, [limit, offset, search]);
 
-  async function handleDeletar(id) {
+  async function handleDeletar(_id) {
     if (window.confirm("Tem certeza que deseja remover este veículo?")) {
       try {
-        await deletarVeiculo(id);
+        await deletarVeiculo(_id);
         await carregarVeiculos();
       } catch (err) {
         alert("Erro ao deletar veículo", err);
@@ -162,9 +174,9 @@ export default function StyledMainDash() {
 
   useEffect(() => {
     carregarVeiculos();
-  }, []);
+  }, [carregarVeiculos]);
 
-  const totalVeiculos = veiculos?.length ?? 0;
+  const totalVeiculos = total;
 
   const veiculosEmProducao = veiculos?.filter(
     (v) => v.status === "em atendimento"
@@ -173,6 +185,22 @@ export default function StyledMainDash() {
   const veiculosFinalizados = veiculos?.filter(
     (v) => v.status === "finalizado"
   )?.length ?? 0;
+
+  const currentPage = Math.floor(offset / limit) + 1;
+
+  const totalPages = Math.ceil(total / limit);
+
+  function nextPage() {
+    if (offset + limit < total) {
+      setOffset(offset + limit);
+    }
+  }
+
+  function prevPage() {
+    if (offset - limit >= 0) {
+      setOffset(offset - limit);
+    }
+  }
 
   return (
     <StyledMain>
@@ -211,9 +239,22 @@ export default function StyledMainDash() {
           <small>concluídos hoje</small>
         </InsightCard>
       </StyledInsights>
+      <input
+        type="text"
+        placeholder="Buscar por placa, modelo ou cliente"
+        value={search}
+        onChange={(e) => {
+          setOffset(0);
+          setSearch(e.target.value);
+        }}
+      />
 
       <StyledHistory
         items={veiculos}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onNextPage={nextPage}
+        onPrevPage={prevPage}
         onDelete={handleDeletar}
         onUpdateStatus={handleProximoStatus}
       />

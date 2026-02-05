@@ -92,7 +92,6 @@ export default function StyledLogin() {
         
         localStorage.setItem("token", data.token);
         
-        alert("Login realizado com sucesso!");
         navigate("/dashboard");
       } else {
         await cadastrarUsuario(formData);
