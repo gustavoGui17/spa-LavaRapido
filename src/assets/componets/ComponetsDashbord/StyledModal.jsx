@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { criarVeiculo } from "../../services/veiculoService";
 import styled, { keyframes } from "styled-components";
 
-
 const fadeIn = keyframes`
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
@@ -21,156 +20,93 @@ const StyledBackdrop = styled.div`
 
 const StyledModalBox = styled.div`
   background: var(--color-white);
-  border-radius: 10px;
-  padding: 25px;
-  width: 550px;
+  border-radius: 16px;
+  padding: 32px;
+  width: 560px;
   max-width: 95%;
-  animation: ${fadeIn} 0.2s ease;
+  animation: ${fadeIn} 0.25s ease;
   position: relative;
-`;
-
-const StyledCloseButton = styled.button`
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 22px;
-  background: none;
-  border: none;
-  color: #333;
-  cursor: pointer;
-
-  &:hover {
-    color: red;
-  }
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 `;
 
 const StyledModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
-`;
+  gap: 24px;
 
-const StyledResume = styled.div`
-  display: flex;
-  padding: 10px 0;
-  padding-top: 10%;
-  gap: 40px;
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    box-shadow: var(--box-shadow);
-    border-radius: var(--card-border-radius);
-    padding: 10px;
-    width: 150px;
+  h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
   }
 `;
 
-const StyledInput = styled.input`
-  padding: 5px;
-  background: var(--color-white);
-  padding: 0.4rem;
-  border-radius: var(--card-border-radius);
-  margin-top: 1rem;
-  box-shadow: var(--box-shadow);
-  border: none;
-  outline: none;
-  transition: all 300ms ease;
+const Label = styled.label`
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+`;
 
-  &:hover {
-    box-shadow: none;
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 15px 14px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: orange;
+    background: #fff;
   }
 `;
 
 const StyledSelect = styled.select`
-  padding: 5px;
-  background: var(--color-white);
-  padding: 0.4rem;
-  border-radius: var(--card-border-radius);
-  margin-top: 1rem;
-  box-shadow: var(--box-shadow);
-  border: none;
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  font-size: 0.9rem;
   outline: none;
-  transition: all 300ms ease;
+  transition: all 0.2s ease;
 
-  &:hover {
-    box-shadow: none;
+  &:focus {
+    border-color: orange;
+    background: #fff;
   }
 `;
 
-const StyledTotal = styled.span`
-  background: var(--color-white);
-  padding: 0.4rem;
-  border-radius: var(--card-border-radius);
-  margin-top: 1rem;
-  box-shadow: var(--box-shadow);
-  transition: all 300ms ease;
+const GridTwoCols = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 
-  &:hover {
-    box-shadow: none;
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const StyledNewItem = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: end;
-  justify-content: center;
-  flex-wrap: wrap;
-`;
-
-const StyledDivAmount = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledAddButton = styled.button`
-  background-color: var(--color-primary);
+const SubmitButton = styled.button`
+  margin-top: 12px;
+  padding: 14px;
+  background: orange;
   color: white;
   border: none;
-  padding: 0 15px;
-  border-radius: 5px;
+  border-radius: 12px;
   cursor: pointer;
-  height: 34px;
-`;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
 
-const StyledDivTable = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledTable = styled.table`
-  width: 98%;
-  padding: 20px 0;
-  border-radius: 5px;
-`;
-
-const Th = styled.th`
-  text-align: start;
-  border-bottom: inset;
-  padding-bottom: 5px;
-`;
-
-const Td = styled.td`
-  padding: 8px 0;
-`;
-
-const Amount = styled(Th)`
-  width: 30%;
-`;
-
-const Type = styled(Th)`
-  width: 80px;
-  text-align: center;
-`;
-
-const Action = styled(Th)`
-  width: 40px;
-  text-align: center;
+  &:hover {
+    filter: brightness(0.9);
+  }
 `;
 
 export default function ModalVeiculos({ open, onClose, onSuccess }) {
@@ -179,8 +115,7 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
   const [cor, setCor] = useState("");
   const [nomeCliente, setNomeCliente] = useState("");
   const [contato, setContato] = useState("");
-  const [tipoLavagem, setTipoLavagem] = useState("simples"); // Valor exato do enum no back
-  // const [total, setTotal] = useState(""); // Nota: seu schema não tem 'total', considere adicionar lá depois
+  const [tipoLavagem, setTipoLavagem] = useState("simples");
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -197,8 +132,7 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
   }
 
   async function finalizarCadastro() {
-    // Validação básica de campos obrigatórios do Schema
-    if (!placa || !modelo || !cor || !nomeCliente || !contato) {
+    if (!placa || !modelo || !cor || !nomeCliente || !contato || !tipoLavagem) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
@@ -211,16 +145,14 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
         tipoLavagem,
         nomeCliente,
         contato,
-        // O status e entryDate o back-end já define como default
       };
 
       await criarVeiculo(novoVeiculo);
-      
+
       alert("Veículo cadastrado com sucesso!");
-      onSuccess(); // Função para recarregar a lista na Dash
-      onClose();   // Fecha a modal
-      
-      // Limpa os campos
+      onSuccess();
+      onClose();
+
       setPlaca("");
       setModelo("");
       setCor("");
@@ -232,47 +164,80 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
     }
   }
 
+  function maskPhone(value) {
+    value = value.replace(/\D/g, "");
+    value = value.slice(0, 11);
+
+    if (value.length <= 10) {
+      return value
+        .replace(/^(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return value
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+  }
+
   return (
     <StyledBackdrop onClick={onClose}>
       <StyledModalBox onClick={(e) => e.stopPropagation()}>
-        <StyledCloseButton onClick={onClose}>×</StyledCloseButton>
 
         <StyledModalContainer>
           <h2>Cadastrar Novo Veículo</h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+
+          <GridTwoCols>
             <div>
-              <h3>Placa</h3>
+              <Label>Placa</Label>
               <StyledInput
                 value={placa}
                 onChange={(e) => setPlaca(handlePlacaMask(e.target.value))}
                 placeholder="ABC1D23"
               />
             </div>
-            <div>
-              <h3>Modelo</h3>
-              <StyledInput value={modelo} onChange={(e) => setModelo(e.target.value)} placeholder="Ex: Gol G7" />
-            </div>
-          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
             <div>
-              <h3>Cor</h3>
-              <StyledInput value={cor} onChange={(e) => setCor(e.target.value)} placeholder="Ex: Preto" />
+              <Label>Modelo</Label>
+              <StyledInput
+                value={modelo}
+                onChange={(e) => setModelo(e.target.value)}
+                placeholder="Ex: Gol G7"
+              />
             </div>
+          </GridTwoCols>
+
+          <GridTwoCols>
             <div>
-              <h3>Cliente</h3>
-              <StyledInput value={nomeCliente} onChange={(e) => setNomeCliente(e.target.value)} placeholder="Nome do dono" />
+              <Label>Cor</Label>
+              <StyledInput
+                value={cor}
+                onChange={(e) => setCor(e.target.value)}
+                placeholder="Ex: Preto"
+              />
             </div>
+
+            <div>
+              <Label>Cliente</Label>
+              <StyledInput
+                value={nomeCliente}
+                onChange={(e) => setNomeCliente(e.target.value)}
+                placeholder="Nome do dono"
+              />
+            </div>
+          </GridTwoCols>
+
+          <div>
+            <Label>Contato (WhatsApp)</Label>
+            <StyledInput
+              value={contato}
+              onChange={(e) => setContato(maskPhone(e.target.value))}
+              placeholder="(11) 99999-9999"
+              inputMode="numeric"
+            />
           </div>
 
           <div>
-            <h3>Contato (WhatsApp)</h3>
-            <StyledInput value={contato} onChange={(e) => setContato(e.target.value)} placeholder="(11) 99999-9999" />
-          </div>
-
-          <div>
-            <h3>Tipo de lavagem</h3>
+            <Label>Tipo de lavagem</Label>
             <StyledSelect
               value={tipoLavagem}
               onChange={(e) => setTipoLavagem(e.target.value)}
@@ -283,23 +248,11 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
             </StyledSelect>
           </div>
 
-          <button 
-            onClick={finalizarCadastro}
-            style={{ 
-              marginTop: '20px', 
-              padding: '12px', 
-              backgroundColor: 'orange', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
-          >
+          <SubmitButton onClick={finalizarCadastro}>
             Finalizar Cadastro
-          </button>
+          </SubmitButton>
         </StyledModalContainer>
       </StyledModalBox>
-    </StyledBackdrop>
+    </StyledBackdrop >
   );
 }
