@@ -121,6 +121,44 @@ const InsightCard = styled.div`
   }
 `;
 
+export const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 16px;
+
+  input {
+    height: 38px;
+    width: 320px;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    font-size: 14px;
+    outline: none;
+
+    &:focus {
+      border-color: #3b82f6;
+    }
+  }
+
+  button {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #3b82f6;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background-color: orange;
+    }
+  }
+`;
+
 export default function StyledMainDash() {
   const [openModal, setOpenModal] = useState(false);
   const [veiculos, setVeiculos] = useState([]);
@@ -239,15 +277,21 @@ export default function StyledMainDash() {
           <small>concluídos hoje</small>
         </InsightCard>
       </StyledInsights>
-      <input
-        type="text"
-        placeholder="Buscar por placa, modelo ou cliente"
-        value={search}
-        onChange={(e) => {
-          setOffset(0);
-          setSearch(e.target.value);
-        }}
-      />
+      <SearchContainer>
+        <input
+          type="text"
+          placeholder="Buscar por placa, modelo ou cliente"
+          value={search}
+          onChange={(e) => {
+            setOffset(0);
+            setSearch(e.target.value);
+          }}
+        />
+
+        <button onClick={() => setOffset(0)}>
+          Pesquisar
+        </button>
+      </SearchContainer>
 
       <StyledHistory
         items={veiculos}

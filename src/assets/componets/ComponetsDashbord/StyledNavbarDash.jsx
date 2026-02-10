@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 export const StyledAside = styled.aside`
   height: 100vh;
@@ -85,6 +86,16 @@ export const StyledSidebar = styled.nav`
 `;
 
 export default function StyledNavbarDash() {
+
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/login"); 
+  }
+
   return (
     <StyledAside>
       <StyledTop>
@@ -115,7 +126,7 @@ export default function StyledNavbarDash() {
           <h3>Configuração</h3>
         </a>
 
-        <a href="#">
+        <a onClick={handleLogout}>
           <span className="material-symbols-outlined">logout</span>
           <h3>Logout</h3>
         </a>

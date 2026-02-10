@@ -130,6 +130,7 @@ export default function StyledLogin() {
           <StyledInput
             type="password"
             name="password"
+            autoComplete="new-password"
             placeholder="Senha"
             value={formData.password}
             onChange={handleChange}
