@@ -199,17 +199,30 @@ export default function StyledMainDash() {
     }
   }
 
-  async function handleProximoStatus(veiculo) {
-    const fluxo = ["pendente", "em atendimento", "finalizado"];
-    const prox = fluxo[fluxo.indexOf(veiculo.status) + 1];
-    if (prox) {
-      try {
-        await atualizarVeiculo(veiculo._id, { status: prox });
-        carregarVeiculos();
-      } catch (err) { alert("Erro ao atualizar", err); }
-    }
+ async function handleProximoStatus(veiculo) {
+  if (!veiculo) return;
+  
+  console.log("VEICULO RECEBIDO:", veiculo);
+  const id = veiculo._id || veiculo.id;
+
+  if (!id) {
+    console.error("ID do veículo não encontrado", veiculo);
+    return;
   }
 
+  const fluxo = ["pendente", "em atendimento", "finalizado"];
+  const prox = fluxo[fluxo.indexOf(veiculo.status) + 1];
+
+  if (!prox) return;
+
+  try {
+    await atualizarVeiculo(id, { status: prox });
+    carregarVeiculos();
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao atualizar status");
+  }
+}
   useEffect(() => {
     carregarVeiculos();
   }, [carregarVeiculos]);

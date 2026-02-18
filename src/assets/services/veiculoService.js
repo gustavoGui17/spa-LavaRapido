@@ -25,7 +25,7 @@ export const finalizarVeiculo = async (id) => {
 };
 
 export const atualizarVeiculo = async (id, dados) => {
-    const response = await api.put(`/veiculo/${id}`, dados);
+    const response = await api.patch(`/veiculo/${id}`, dados);
     return response.data;
 };
 
