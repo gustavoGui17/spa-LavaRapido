@@ -86,14 +86,13 @@ export const StyledSidebar = styled.nav`
 `;
 
 export default function StyledNavbarDash() {
-
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
-    navigate("/login"); 
+    navigate("/login");
   }
 
   return (
@@ -104,30 +103,34 @@ export default function StyledNavbarDash() {
             Enri <span className="danger">car</span>
           </h2>
         </div>
-
-        <StyledClose id="close-btn">
-          <span className="material-symbols-outlined">close</span>
-        </StyledClose>
       </StyledTop>
 
       <StyledSidebar>
-        <a href="#" className="active">
-          <span className="material-symbols-outlined">space_dashboard</span>
+        <a onClick={() => navigate("/dashboard")}>
+          <span className="material-symbols-outlined">
+            space_dashboard
+          </span>
           <h3>Dashboard</h3>
         </a>
 
-        <a href="Contas.html">
-          <span className="material-symbols-outlined">person</span>
-          <h3>Costomers</h3>
-        </a>
+        {user?.role === "admin" && (
+          <a onClick={() => navigate("/customers")}>
+            <span className="material-symbols-outlined">person</span>
+            <h3>Customers</h3>
+          </a>
+        )}
 
-        <a href="Settings.html">
-          <span className="material-symbols-outlined">settings</span>
+        <a onClick={() => navigate("/settings")}>
+          <span className="material-symbols-outlined">
+            settings
+          </span>
           <h3>Configuração</h3>
         </a>
 
         <a onClick={handleLogout}>
-          <span className="material-symbols-outlined">logout</span>
+          <span className="material-symbols-outlined">
+            logout
+          </span>
           <h3>Logout</h3>
         </a>
       </StyledSidebar>

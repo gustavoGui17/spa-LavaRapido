@@ -202,7 +202,6 @@ export default function StyledMainDash() {
  async function handleProximoStatus(veiculo) {
   if (!veiculo) return;
   
-  console.log("VEICULO RECEBIDO:", veiculo);
   const id = veiculo._id || veiculo.id;
 
   if (!id) {

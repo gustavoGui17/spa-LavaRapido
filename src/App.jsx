@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./route/ProtectRoute";
+import { AdminRoute } from "./route/AdminRoute";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 
 import Home from './assets/pages/Home/Home'
 import Login from './assets/pages/Login/Login';
 import Dashbord from "./assets/pages/Dashbord/Dashbord";
+import Customers from "./assets/pages/Customers/Customers";
 
 function ScrollToHashElement() {
   const { pathname, hash } = useLocation();
@@ -66,6 +68,19 @@ function AnimatedRoutes() {
             </MotionPage>
           </ProtectedRoute>
         } />
+
+        <Route
+          path="/customers"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <MotionPage from={50}>
+                  <Customers />
+                </MotionPage>
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom"; 
-import { loginUsuario} from "../../services/authService";
+import { useNavigate } from "react-router-dom";
+import { loginUsuario } from "../../services/authService";
 import { cadastrarUsuario } from "../../services/userService";
 
 const StyledContainer = styled.div`
@@ -89,19 +89,27 @@ export default function StyledLogin() {
           email: formData.email,
           password: formData.password
         });
-        
+
         localStorage.setItem("token", data.token);
-        
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         navigate("/dashboard");
       } else {
         await cadastrarUsuario(formData);
         alert("Cadastro realizado! Agora faça o login.");
-        setIsLogin(true); 
+        setIsLogin(true);
       }
     } catch (error) {
       console.error("Erro na autenticação:", error);
       alert(error.response?.data?.message || "Erro ao processar requisição");
     }
+
+    const data = await loginUsuario({
+      email: formData.email,
+      password: formData.password
+    });
+
+    console.log(data);
   };
 
   return (
