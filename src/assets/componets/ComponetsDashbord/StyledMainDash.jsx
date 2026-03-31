@@ -8,19 +8,6 @@ const StyledMain = styled.main`
   margin-top: 1.4rem;
 `;
 
-const StyledDate = styled.div`
-  display: inline-block;
-  background: var(--color-light);
-  border-radius: var(--border-radius-1);
-  margin-top: 1rem;
-  padding: 0.5rem 1.6rem;
-
-  input[type="date"] {
-    background: transparent;
-    color: var(--color-dark);
-  }
-`;
-
 const StyledInsights = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -165,8 +152,8 @@ export default function StyledMainDash() {
   const [loading, setLoading] = useState(true);
   const [limit] = useState(5);
   const [offset, setOffset] = useState(0);
-  const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");
+  const [total, setTotal] = useState(0);
 
   const carregarVeiculos = useCallback(async () => {
     try {
