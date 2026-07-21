@@ -1,10 +1,10 @@
-import StyledNavbar from "../../componets/ComponetsHome/Navbar/StyledNavbar";
-import StyledBanner from "../../componets/ComponetsHome/Navbar/StyledBanner";
-import StyledPricing from "../../componets/ComponetsHome/Cards/StyledPricing";
-import StyledMain from "../../componets/ComponetsHome/Main/StyledMain";
-import StyledCarDetaling from "../../componets/ComponetsHome/Main/StyledCarDetaling";
-import StyledGallery from "../../componets/ComponetsHome/Gallery/StyledGallery";
-import StyledMaps from "../../componets/ComponetsHome/Maps/StyledMaps";
+import StyledNavbar from "../../components/Home/Navbar/StyledNavbar";
+import StyledBanner from "../../components/Home/Navbar/StyledBanner";
+import StyledPricing from "../../components/Home/Cards/StyledPricing";
+import StyledMain from "../../components/Home/Main/StyledMain";
+import StyledCarDetaling from "../../components/Home/Main/StyledCarDetaling";
+import StyledGallery from "../../components/Home/Gallery/StyledGallery";
+import StyledMaps from "../../components/Home/Maps/StyledMaps";
 
 export default function Home(){
     return (

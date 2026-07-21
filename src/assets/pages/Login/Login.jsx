@@ -1,5 +1,5 @@
-import StyledLogin from "../../componets/ComponetsLogin/StyledLogin";
-import StyledNavbar from "../../componets/ComponetsHome/Navbar/StyledNavbar";
+import StyledLogin from "../../components/Login/StyledLogin";
+import StyledNavbar from "../../components/Home/Navbar/StyledNavbar";
 
 export default function Login(){
     return (

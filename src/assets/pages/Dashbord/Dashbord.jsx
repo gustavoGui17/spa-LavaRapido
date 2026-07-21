@@ -1,6 +1,6 @@
-import StyledNavbarDash from "../../componets/ComponetsDashbord/StyledNavbarDash";
-import StyledMainDash from "../../componets/ComponetsDashbord/StyledMainDash";
-import { DashboardContainer } from "../../componets/ComponetsDashbord/DashboardContainer";
+import StyledNavbarDash from "../../components/Dashbord/StyledNavbarDash";
+import StyledMainDash from "../../components/Dashbord/StyledMainDash";
+import { DashboardContainer } from "../../components/Dashbord/DashboardContainer";
 
 export default function Dashbord(){
     return(
