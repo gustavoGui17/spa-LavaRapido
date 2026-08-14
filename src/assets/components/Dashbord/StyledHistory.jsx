@@ -13,13 +13,13 @@ const Table = styled.table`
     padding: 14px 12px;
     font-size: 0.85rem;
     color: var(--color-dark-variant);
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-border);
     white-space: nowrap;
   }
 
   td {
     padding: 14px 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-border);
     vertical-align: middle;
     font-size: 0.9rem;
   }
@@ -32,7 +32,7 @@ const Table = styled.table`
   }
 
   tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-light);
   }
 `;
 
@@ -70,8 +70,9 @@ const Pagination = styled.div`
   button {
     padding: 6px 14px;
     border-radius: 6px;
-    border: 1px solid #ddd;
-    background: #fff;
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    color: var(--color-dark);
     cursor: pointer;
 
     &:disabled {

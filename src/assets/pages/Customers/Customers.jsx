@@ -1,12 +1,14 @@
 import StyledNavbarDash from "../../components/Dashbord/StyledNavbarDash";
-import StyledCustomers from "../../components/Customers/StyledCustomers";
+import StyledMainCustomers from "../../components/Customers/StyledMainCustomers";
 import { DashboardContainer } from "../../components/Dashbord/DashboardContainer";
 
 export default function Customers() {
   return (
     <DashboardContainer>
       <StyledNavbarDash />
-      <StyledCustomers />
+      <div>
+        <StyledMainCustomers />
+      </div>
     </DashboardContainer>
   );
 }

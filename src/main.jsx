@@ -4,6 +4,8 @@ import GlobalStyle from './assets/css/globalStyled.js'
 import App from './App.jsx'
 import './index.css'
 
+document.body.classList.add('dark-theme-variables')
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <GlobalStyle/>

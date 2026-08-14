@@ -31,7 +31,7 @@ const StyleNav = styled.nav`
       position: absolute;
       top: 100px;
       right: 0;
-      background: #fff;
+      background: var(--color-white);
       width: 100%;
       flex-direction: column;
       gap: 20px;
@@ -79,7 +79,7 @@ const Hamburger = styled.div`
   span {
     width: 25px;
     height: 3px;
-    background: black;
+    background: #fff;
   }
 
   @media(max-width: 768px){

@@ -13,7 +13,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledFormWrapper = styled.div`
-  background: #fff;
+  background: var(--color-white);
   padding: 4rem;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -23,17 +23,19 @@ const StyledFormWrapper = styled.div`
 
 const StyledTitle = styled.h2`
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-dark);
 `;
 
 const StyledInput = styled.input`
   width: 100%;
   padding: 10px;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   outline: none;
   font-size: 1rem;
+  background: var(--color-background);
+  color: var(--color-dark);
 
   &:focus {
     border-color: #4facfe;
@@ -59,7 +61,7 @@ const StyledButton = styled.button`
 const StyledToggleText = styled.p`
   margin-top: 1rem;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--color-dark-variant);
 
   span {
     color: #4facfe;

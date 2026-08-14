@@ -38,14 +38,14 @@ const StyledModalContainer = styled.div`
     margin: 0;
     font-size: 1.4rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-dark);
   }
 `;
 
 const Label = styled.label`
   font-size: 0.85rem;
   font-weight: 500;
-  color: #555;
+  color: var(--color-dark-variant);
 `;
 
 const StyledInput = styled.input`
@@ -53,15 +53,16 @@ const StyledInput = styled.input`
   padding: 15px 14px;
   margin-top: 10px;
   border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  background: #fafafa;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-dark);
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s ease;
 
   &:focus {
     border-color: orange;
-    background: #fff;
+    background: var(--color-white);
   }
 `;
 
@@ -70,15 +71,16 @@ const StyledSelect = styled.select`
   padding: 12px 14px;
   margin-top: 6px;
   border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  background: #fafafa;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-dark);
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s ease;
 
   &:focus {
     border-color: orange;
-    background: #fff;
+    background: var(--color-white);
   }
 `;
 

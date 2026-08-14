@@ -11,7 +11,7 @@ import img8 from "../../../img/Gallery/Property 1=Frame 37.png"
 const StyledSection = styled.section`
   padding: 60px 40px;
   text-align: center;
-  background: #fff;
+  background: var(--color-white);
 `;
 
 const StyledHeader = styled.div`
@@ -25,7 +25,7 @@ const StyledHeader = styled.div`
 
   p {
     font-size: 15px;
-    color: #444;
+    color: var(--color-dark-variant);
     line-height: 1.5;
     max-width: 700px;
     margin: 0 auto;

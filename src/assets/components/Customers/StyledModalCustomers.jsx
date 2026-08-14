@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { criarCustumers } from "../../services/customersService";
+import { criarCustomers } from "../../services/customersService";
 import styled, { keyframes } from "styled-components";
 
 const fadeIn = keyframes`
@@ -32,68 +32,101 @@ const StyledModalBox = styled.div`
 const StyledModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
 
   h2 {
-    margin: 0;
+    margin: 0 0 4px;
     font-size: 1.4rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-dark);
   }
 `;
 
 const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #555;
+  color: var(--color-dark-variant);
 `;
 
 const StyledInput = styled.input`
   width: 100%;
-  padding: 15px 14px;
-  margin-top: 10px;
+  padding: 14px 14px;
   border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  background: #fafafa;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-dark);
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s ease;
 
   &:focus {
     border-color: orange;
-    background: #fff;
+    background: var(--color-white);
   }
 `;
 
 const StyledSelect = styled.select`
   width: 100%;
-  padding: 12px 14px;
-  margin-top: 6px;
+  padding: 13px 14px;
   border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  background: #fafafa;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-dark);
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s ease;
 
   &:focus {
     border-color: orange;
-    background: #fff;
+    background: var(--color-white);
   }
 `;
 
 const GridTwoCols = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 18px;
 
   @media (max-width: 500px) {
     grid-template-columns: 1fr;
   }
 `;
 
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TipoDocumento = styled.div`
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: var(--color-background);
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+`;
+
+const TipoButton = styled.button`
+  flex: 1;
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  background: ${({ active }) => (active ? "orange" : "transparent")};
+  color: ${({ active }) => (active ? "#fff" : "var(--color-dark-variant)")};
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ active }) => (active ? "orange" : "var(--color-white)")};
+  }
+`;
+
 const SubmitButton = styled.button`
-  margin-top: 12px;
+  margin-top: 8px;
   padding: 14px;
   background: orange;
   color: white;
@@ -113,10 +146,12 @@ export default function StyledModalCustomers({ open, onClose, onSuccess }) {
 const [name, setName] = useState("");
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
 const [nomeFantasia, setNomeFantasia] = useState("");
-const [cnpj, setCnpj] = useState("");
+const [documentoTipo, setDocumentoTipo] = useState("cnpj");
+const [documento, setDocumento] = useState("");
 const [contato, setContato] = useState("");
-const [status, setStatus] = useState("ativo");
+const [status] = useState("ativo");
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -128,9 +163,62 @@ const [status, setStatus] = useState("ativo");
 
   if (!open) return null;
 
+  function maskCpf(value) {
+    value = value.replace(/\D/g, "").slice(0, 11);
+
+    if (value.length <= 3) return value;
+    if (value.length <= 6) return value.replace(/(\d{3})(\d+)/, "$1.$2");
+    if (value.length <= 9)
+      return value.replace(/(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
+
+    return value.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, "$1.$2.$3-$4");
+  }
+
+  function maskCnpj(value) {
+    value = value.replace(/\D/g, "").slice(0, 14);
+
+    if (value.length <= 2) return value;
+    if (value.length <= 5) return value.replace(/(\d{2})(\d+)/, "$1.$2");
+    if (value.length <= 8)
+      return value.replace(/(\d{2})(\d{3})(\d+)/, "$1.$2.$3");
+    if (value.length <= 12)
+      return value.replace(/(\d{2})(\d{3})(\d{3})(\d+)/, "$1.$2.$3/$4");
+
+    return value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d+)/, "$1.$2.$3/$4-$5");
+  }
+
+  function handleDocumentoTipoChange(tipo) {
+    setDocumentoTipo(tipo);
+    setDocumento("");
+  }
+
+  function handleDocumentoChange(value) {
+    const masked =
+      documentoTipo === "cnpj" ? maskCnpj(value) : maskCpf(value);
+    setDocumento(masked);
+  }
+
   async function finalizarCadastro() {
-    if (!name || !email || !password || !nomeFantasia || !cnpj || !contato) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !nomeFantasia ||
+      !documento ||
+      !contato
+    ) {
       alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("As senhas não coincidem.");
       return;
     }
 
@@ -140,12 +228,13 @@ const [status, setStatus] = useState("ativo");
         email,
         password,
         nomeFantasia,
-        cnpj,
+        documento,
+        documentoTipo,
         contato,
         status,
       };
 
-      await criarCustumers(novoCustomer);
+      await criarCustomers(novoCustomer);
 
       alert("Cliente cadastrado com sucesso!");
       onSuccess();
@@ -154,8 +243,9 @@ const [status, setStatus] = useState("ativo");
       setName("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
       setNomeFantasia("");
-      setCnpj("");
+      setDocumento("");
       setContato("");
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
@@ -186,65 +276,102 @@ const [status, setStatus] = useState("ativo");
           <h2>Cadastrar Novo Cliente</h2>
 
           <GridTwoCols>
-            <div>
+            <Field>
               <Label>Nome</Label>
               <StyledInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Nome completo"
               />
-            </div>
+            </Field>
 
-            <div>
+            <Field>
               <Label>Email</Label>
               <StyledInput
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
+                type="email"
               />
-            </div>
+            </Field>
           </GridTwoCols>
 
           <GridTwoCols>
-            <div>
-              <Label>nomeFantasia</Label>
+            <Field>
+              <Label>Nome fantasia</Label>
               <StyledInput
                 value={nomeFantasia}
                 onChange={(e) => setNomeFantasia(e.target.value)}
                 placeholder="Nome fantasia"
               />
-            </div>
+            </Field>
 
-            <div>
-              <Label>Password</Label>
+            <Field>
+              <Label>Contato (WhatsApp)</Label>
+              <StyledInput
+                value={contato}
+                onChange={(e) => setContato(maskPhone(e.target.value))}
+                placeholder="(11) 99999-9999"
+                inputMode="numeric"
+              />
+            </Field>
+          </GridTwoCols>
+
+          <Field>
+            <Label>Tipo de documento</Label>
+            <TipoDocumento>
+              <TipoButton
+                type="button"
+                active={documentoTipo === "cnpj"}
+                onClick={() => handleDocumentoTipoChange("cnpj")}
+              >
+                CNPJ
+              </TipoButton>
+              <TipoButton
+                type="button"
+                active={documentoTipo === "cpf"}
+                onClick={() => handleDocumentoTipoChange("cpf")}
+              >
+                CPF
+              </TipoButton>
+            </TipoDocumento>
+          </Field>
+
+          <Field>
+            <Label>{documentoTipo === "cnpj" ? "CNPJ" : "CPF"}</Label>
+            <StyledInput
+              value={documento}
+              onChange={(e) => handleDocumentoChange(e.target.value)}
+              placeholder={
+                documentoTipo === "cnpj"
+                  ? "00.000.000/0000-00"
+                  : "000.000.000-00"
+              }
+              inputMode="numeric"
+            />
+          </Field>
+
+          <GridTwoCols>
+            <Field>
+              <Label>Senha</Label>
               <StyledInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Senha"
                 type="password"
               />
-            </div>
+            </Field>
+
+            <Field>
+              <Label>Confirmar senha</Label>
+              <StyledInput
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Repita a senha"
+                type="password"
+              />
+            </Field>
           </GridTwoCols>
-
-                    <div>
-            <Label>cnpj</Label>
-            <StyledInput
-              value={cnpj}
-              onChange={(e) => setCnpj(e.target.value)}
-              placeholder="00.000.000/0000-00"
-              inputMode="numeric"
-            />
-          </div>
-
-          <div>
-            <Label>Contato (WhatsApp)</Label>
-            <StyledInput
-              value={contato}
-              onChange={(e) => setContato(maskPhone(e.target.value))}
-              placeholder="(11) 99999-9999"
-              inputMode="numeric"
-            />
-          </div>
 
           <SubmitButton onClick={finalizarCadastro}>
             Finalizar Cadastro

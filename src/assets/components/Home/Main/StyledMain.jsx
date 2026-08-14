@@ -6,7 +6,7 @@ const StyledContainer = styled.section`
   align-items: flex-start;
   justify-content: center;
   padding: 40px;
-  background-color: white;
+  background-color: var(--color-white);
   gap: 30px;
 
   @media (max-width: 900px) {

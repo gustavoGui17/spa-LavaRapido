@@ -12,16 +12,16 @@ const Table = styled.table`
     padding: 14px 12px;
     font-size: 0.85rem;
     color: var(--color-dark-variant);
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-border);
   }
 
   td {
     padding: 14px 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-border);
   }
 
   tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-light);
   }
 `;
 
@@ -39,13 +39,48 @@ const Actions = styled.div`
     background: none;
     border: none;
     cursor: pointer;
+    padding: 4px;
+
+    span {
+      font-size: 22px;
+    }
+  }
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 1.5rem;
+
+  button {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    color: var(--color-dark);
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    font-weight: 500;
   }
 `;
 
 export default function StyledCustomers({
   items = [],
   onDelete,
-  onToggleStatus,
+  onUpdateStatus,
+  totalPages,
+  currentPage,
+  onNextPage,
+  onPrevPage,
 }) {
   return (
     <div>
@@ -56,7 +91,7 @@ export default function StyledCustomers({
           <tr>
             <th>Nome</th>
             <th>Email</th>
-            <th>CNPJ</th>
+            <th>Documento</th>
             <th>Contato</th>
             <th>Status</th>
             <th>Ações</th>
@@ -81,7 +116,7 @@ export default function StyledCustomers({
               <tr key={customer._id}>
                 <td>{customer.user?.name}</td>
                 <td>{customer.user?.email}</td>
-                <td>{customer.cnpj}</td>
+                <td>{customer.documento}</td>
                 <td>{customer.contato}</td>
 
                 <td>
@@ -90,7 +125,7 @@ export default function StyledCustomers({
 
                 <td>
                   <Actions>
-                    <button onClick={() => onToggleStatus(customer)}>
+                    <button onClick={() => onUpdateStatus(customer)}>
                       <span
                         className="material-symbols-outlined"
                         style={{ color: "#f39c12" }}
@@ -114,6 +149,28 @@ export default function StyledCustomers({
           )}
         </tbody>
       </Table>
+
+      {totalPages > 1 && (
+        <Pagination>
+          <button
+            onClick={onPrevPage}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </button>
+
+          <span>
+            Página {currentPage} de {totalPages}
+          </span>
+
+          <button
+            onClick={onNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Próxima
+          </button>
+        </Pagination>
+      )}
     </div>
   );
 }

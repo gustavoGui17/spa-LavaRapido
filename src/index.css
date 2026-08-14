@@ -12,6 +12,7 @@
     --color-primary-variant: #111e88;
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
+    --color-border: #dce1eb;
 
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -32,5 +33,6 @@
     --color-dark: #edeffd;
     --color-dark-variant: #a3bdcc;
     --color-light: rgba(0, 0, 0, 0.4);
+    --color-border: rgba(255, 255, 255, 0.2);
     --box-shadow: 0 2rem 3rem var(--color-light);
 }

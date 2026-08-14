@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Section = styled.section`
   padding: 60px 40px;
-  background: #fff;
+  background: var(--color-white);
   text-align: center;
 `;
 
@@ -23,7 +23,7 @@ const InfoGrid = styled.div`
 `;
 
 const InfoCard = styled.div`
-  background: #f9f9f9;
+  background: var(--color-light);
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -36,7 +36,7 @@ const InfoCard = styled.div`
 
   p {
     font-size: 14px;
-    color: #444;
+    color: var(--color-dark-variant);
   }
 `;
 

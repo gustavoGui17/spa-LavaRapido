@@ -3,7 +3,7 @@ import styled from "styled-components"
 const StyledSection = styled.section`
   padding: 60px 40px;
   text-align: center;
-  background: #fff;
+  background: var(--color-white);
 `;
 
 const StyledTitle = styled.h2`
@@ -36,7 +36,7 @@ const StyledCard = styled.div`
 const Icon = styled.span`
   font-size: 20px;
   font-weight: bold;
-  color: black;
+  color: var(--color-dark);
 `;
 
 const StyledContent = styled.div`
@@ -48,7 +48,7 @@ const StyledContent = styled.div`
 
   p {
     font-size: 14px;
-    color: #444;
+    color: var(--color-dark-variant);
     line-height: 1.4;
   }
 `;

@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
-import { listarVeiculos, atualizarVeiculo, deletarVeiculo } from "../../services/veiculoService";
+import { listarCustomers, atualizarCustomer, deletarCustomer } from "../../services/customersService";
 import styled from "styled-components";
-import ModalVeiculos from "./StyledModal";
-import StyledHistory from "./StyledHistory";
+import StyledModalCustomers from "./StyledModalCustomers";
+import StyledCustomers from "./StyledCustomers";
+
+const ModalClientes = StyledModalCustomers;
 
 const StyledMain = styled.main`
   margin-top: 1.4rem;
@@ -148,81 +150,81 @@ export const SearchContainer = styled.div`
   }
 `;
 
-export default function StyledMainDash() {
+export default function StyledMainCustomers() {
   const [openModal, setOpenModal] = useState(false);
-  const [veiculos, setVeiculos] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [limit] = useState(5);
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
 
-  const carregarVeiculos = useCallback(async () => {
+  const carregarCustomers = useCallback(async () => {
     try {
       setLoading(true);
 
-      const response = await listarVeiculos({
+      const response = await listarCustomers({
         limit,
         offset,
         search
       });
 
-      setVeiculos(response.results || []);
+      setCustomers(response.results || []);
       setTotal(response.total || 0);
 
     } catch (error) {
-      console.error("Erro ao carregar veículos", error);
+      console.error("Erro ao carregar clientes", error);
     } finally {
       setLoading(false);
     }
   }, [limit, offset, search]);
 
   async function handleDeletar(_id) {
-    if (window.confirm("Tem certeza que deseja remover este veículo?")) {
+    if (window.confirm("Tem certeza que deseja remover este cliente?")) {
       try {
-        await deletarVeiculo(_id);
-        await carregarVeiculos();
+        await deletarCustomer(_id);
+        await carregarCustomers();
       } catch (err) {
-        alert("Erro ao deletar veículo", err);
+        alert("Erro ao deletar cliente", err);
       }
     }
   }
 
- async function handleProximoStatus(veiculo) {
-  if (!veiculo) return;
+ async function handleProximoStatus(customer) {
+  if (!customer) return;
   
-  const id = veiculo._id || veiculo.id;
+  const id = customer._id || customer.id;
 
   if (!id) {
-    console.error("ID do veículo não encontrado", veiculo);
+    console.error("ID do cliente não encontrado", customer);
     return;
   }
 
-  const fluxo = ["pendente", "em atendimento", "finalizado"];
-  const prox = fluxo[fluxo.indexOf(veiculo.status) + 1];
+  const fluxo = ["ativo", "inativo"];
+  const prox = fluxo[fluxo.indexOf(customer.status) + 1];
 
   if (!prox) return;
 
   try {
-    await atualizarVeiculo(id, { status: prox });
-    carregarVeiculos();
+    await atualizarCustomer(id, { status: prox });
+    carregarCustomers();
   } catch (err) {
     console.error(err);
     alert("Erro ao atualizar status");
   }
 }
   useEffect(() => {
-    carregarVeiculos();
-  }, [carregarVeiculos]);
+    carregarCustomers();
+  }, [carregarCustomers]);
 
-  const totalVeiculos = total;
+  const totalCustomers = total;
 
-  const veiculosEmProducao = veiculos?.filter(
-    (v) => v.status === "em atendimento"
+  const customersEmAtendimento = customers?.filter(
+    (c) => c.status === "ativo"
   )?.length ?? 0;
 
-  const veiculosFinalizados = veiculos?.filter(
-    (v) => v.status === "finalizado"
+  const customersFinalizados = customers?.filter(
+    (c) => c.status === "inativo"
   )?.length ?? 0;
 
   const currentPage = Math.floor(offset / limit) + 1;
@@ -243,45 +245,43 @@ export default function StyledMainDash() {
 
   return (
     <StyledMain>
-      <h1>Dashboard</h1>
+      <h1>Dashboard Clientes</h1>
       <StyledInsights>
-        <InsightCard type="totalDeVeiculos" onClick={() => setOpenModal(true)}>
+        <InsightCard type="totalDeClientes" onClick={() => setOpenModal(true)}>
           <span className="material-symbols-outlined">trending_up</span>
           <div className="middle">
             <div className="left">
-              <h3>Cadastrar veiculo</h3>
-              <h1>{loading ? "..." : totalVeiculos}</h1>
+              <h3>Cadastrar novo usuário</h3>
+              <h1>{loading ? "..." : totalCustomers}</h1>
             </div>
           </div>
           <small>total de registros</small>
         </InsightCard>
 
-        <InsightCard type="totalDeVeiculoLimpando">
+        <InsightCard type="totalDeClientesAtivos">
           <span className="material-symbols-outlined">refresh</span>
           <div className="middle">
             <div className="left">
-              <h3>Veículos limpando</h3>
-              <h1>{loading ? "..." : veiculosEmProducao}</h1>
+              <h3>Clientes ativos </h3>
+              <h1>{loading ? "..." : customersEmAtendimento}</h1>
             </div>
           </div>
-          <small>status: em atendimento</small>
         </InsightCard>
 
-        <InsightCard type="veiculosFinalizados">
+        <InsightCard type="totalDeClientesInativos">
           <span className="material-symbols-outlined">done_all</span>
           <div className="middle">
             <div className="left">
-              <h3>Veículos finalizados</h3>
-              <h1>{loading ? "..." : veiculosFinalizados}</h1>
+              <h3>Clientes inativos</h3>
+              <h1>{loading ? "..." : customersFinalizados}</h1>
             </div>
           </div>
-          <small>concluídos hoje</small>
         </InsightCard>
       </StyledInsights>
       <SearchContainer>
         <input
           type="text"
-          placeholder="Buscar por placa, modelo ou cliente"
+          placeholder="Buscar clientes por nome, documento (CPF/CNPJ) ou email"
           value={search}
           onChange={(e) => {
             setOffset(0);
@@ -294,8 +294,8 @@ export default function StyledMainDash() {
         </button>
       </SearchContainer>
 
-      <StyledHistory
-        items={veiculos}
+      <StyledCustomers
+        items={customers}
         currentPage={currentPage}
         totalPages={totalPages}
         onNextPage={nextPage}
@@ -304,10 +304,10 @@ export default function StyledMainDash() {
         onUpdateStatus={handleProximoStatus}
       />
 
-      <ModalVeiculos
+      <ModalClientes
         open={openModal}
         onClose={() => setOpenModal(false)}
-        onSuccess={carregarVeiculos}
+        onSuccess={carregarCustomers}
       />
     </StyledMain>
   );
