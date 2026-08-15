@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { logoutUsuario } from "../../services/authService";
 
 export const StyledAside = styled.aside`
   height: 100vh;
@@ -89,10 +90,15 @@ export default function StyledNavbarDash() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
-  function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
+  async function handleLogout() {
+    try {
+      await logoutUsuario();
+    } catch (error) {
+      console.error("Erro ao encerrar sessão:", error);
+    } finally {
+      localStorage.removeItem("user");
+      navigate("/login");
+    }
   }
 
   return (

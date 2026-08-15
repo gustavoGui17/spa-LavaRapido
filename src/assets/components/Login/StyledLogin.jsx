@@ -92,7 +92,6 @@ export default function StyledLogin() {
           password: formData.password
         });
 
-        localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
         navigate("/dashboard");
@@ -105,13 +104,6 @@ export default function StyledLogin() {
       console.error("Erro na autenticação:", error);
       alert(error.response?.data?.message || "Erro ao processar requisição");
     }
-
-    const data = await loginUsuario({
-      email: formData.email,
-      password: formData.password
-    });
-
-    console.log(data);
   };
 
   return (

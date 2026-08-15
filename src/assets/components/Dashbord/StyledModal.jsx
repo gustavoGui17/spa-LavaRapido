@@ -49,8 +49,8 @@ const Label = styled.label`
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
-  padding: 15px 14px;
+  width: 90%;
+  padding: 15px 10px;
   margin-top: 10px;
   border-radius: 10px;
   border: 1px solid var(--color-border);
