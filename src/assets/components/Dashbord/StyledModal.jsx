@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { criarVeiculo } from "../../services/veiculoService";
 import styled, { keyframes } from "styled-components";
+import { toast } from "react-toastify";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: scale(0.95); }
@@ -135,7 +136,7 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
 
   async function finalizarCadastro() {
     if (!placa || !modelo || !cor || !nomeCliente || !contato || !tipoLavagem) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
+      toast.warning("Preencha todos os campos obrigatórios.");
       return;
     }
 
@@ -151,7 +152,7 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
 
       await criarVeiculo(novoVeiculo);
 
-      alert("Veículo cadastrado com sucesso!");
+      toast.success("Veículo cadastrado com sucesso!");
       onSuccess();
       onClose();
 
@@ -162,7 +163,7 @@ export default function ModalVeiculos({ open, onClose, onSuccess }) {
       setContato("");
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
-      alert(error.response?.data?.message || "Erro ao conectar com o servidor");
+      toast.error(error.response?.data?.message || "Erro ao cadastrar veículo. Tente novamente.");
     }
   }
 

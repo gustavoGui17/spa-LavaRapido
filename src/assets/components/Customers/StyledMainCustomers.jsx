@@ -3,6 +3,7 @@ import { listarCustomers, atualizarCustomer, deletarCustomer } from "../../servi
 import styled from "styled-components";
 import StyledModalCustomers from "./StyledModalCustomers";
 import StyledCustomers from "./StyledCustomers";
+import { toast } from "react-toastify";
 
 const ModalClientes = StyledModalCustomers;
 
@@ -183,9 +184,10 @@ export default function StyledMainCustomers() {
     if (window.confirm("Tem certeza que deseja remover este cliente?")) {
       try {
         await deletarCustomer(_id);
+        toast.success("Cliente removido com sucesso!");
         await carregarCustomers();
       } catch (err) {
-        alert("Erro ao deletar cliente", err);
+        toast.error(err.response?.data?.message || "Erro ao remover cliente. Tente novamente.");
       }
     }
   }
@@ -207,10 +209,11 @@ export default function StyledMainCustomers() {
 
   try {
     await atualizarCustomer(id, { status: prox });
+    toast.success("Status atualizado com sucesso!");
     carregarCustomers();
   } catch (err) {
     console.error(err);
-    alert("Erro ao atualizar status");
+    toast.error(err.response?.data?.message || "Erro ao atualizar status. Tente novamente.");
   }
 }
   useEffect(() => {

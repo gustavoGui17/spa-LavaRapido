@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../../services/authService";
 import { cadastrarUsuario } from "../../services/userService";
+import { toast } from "react-toastify";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -97,12 +98,12 @@ export default function StyledLogin() {
         navigate("/dashboard");
       } else {
         await cadastrarUsuario(formData);
-        alert("Cadastro realizado! Agora faça o login.");
+        toast.success("Cadastro realizado com sucesso! Faça o login.");
         setIsLogin(true);
       }
     } catch (error) {
       console.error("Erro na autenticação:", error);
-      alert(error.response?.data?.message || "Erro ao processar requisição");
+      toast.error(error.response?.data?.message || "Erro ao processar requisição. Tente novamente.");
     }
   };
 

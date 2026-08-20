@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { criarCustomers } from "../../services/customersService";
 import styled, { keyframes } from "styled-components";
+import { toast } from "react-toastify";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: scale(0.95); }
@@ -208,17 +209,17 @@ const [status] = useState("ativo");
       !documento ||
       !contato
     ) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
+      toast.warning("Preencha todos os campos obrigatórios.");
       return;
     }
 
     if (password.length < 6) {
-      alert("A senha deve ter pelo menos 6 caracteres.");
+      toast.warning("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("As senhas não coincidem.");
+      toast.warning("As senhas não coincidem.");
       return;
     }
 
@@ -236,7 +237,7 @@ const [status] = useState("ativo");
 
       await criarCustomers(novoCustomer);
 
-      alert("Cliente cadastrado com sucesso!");
+      toast.success("Cliente cadastrado com sucesso!");
       onSuccess();
       onClose();
 
@@ -249,7 +250,7 @@ const [status] = useState("ativo");
       setContato("");
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
-      alert(error.response?.data?.message || "Erro ao conectar com o servidor");
+      toast.error(error.response?.data?.message || "Erro ao cadastrar cliente. Tente novamente.");
     }
   }
 

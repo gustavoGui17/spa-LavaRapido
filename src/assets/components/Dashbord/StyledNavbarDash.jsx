@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { logoutUsuario } from "../../services/authService";
+import ThemeToggle from "../common/ThemeToggle";
 
 export const StyledAside = styled.aside`
   height: 100vh;
@@ -109,6 +110,7 @@ export default function StyledNavbarDash() {
             Enri <span className="danger">car</span>
           </h2>
         </div>
+        <ThemeToggle />
       </StyledTop>
 
       <StyledSidebar>

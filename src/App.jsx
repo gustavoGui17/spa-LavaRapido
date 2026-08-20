@@ -3,6 +3,7 @@ import { ProtectedRoute } from "./route/ProtectRoute";
 import { AdminRoute } from "./route/AdminRoute";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 import Home from './assets/pages/Home/Home'
 import Login from './assets/pages/Login/Login';
@@ -90,9 +91,11 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <Router>
-      <ScrollToHashElement />
-      <AnimatedRoutes />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <ScrollToHashElement />
+        <AnimatedRoutes />
+      </Router>
+    </ThemeProvider>
   );
 }

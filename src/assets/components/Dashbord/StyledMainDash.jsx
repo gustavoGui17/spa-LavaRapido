@@ -3,6 +3,7 @@ import { listarVeiculos, atualizarVeiculo, deletarVeiculo } from "../../services
 import styled from "styled-components";
 import ModalVeiculos from "./StyledModal";
 import StyledHistory from "./StyledHistory";
+import { toast } from "react-toastify";
 
 const StyledMain = styled.main`
   margin-top: 1.4rem;
@@ -181,9 +182,10 @@ export default function StyledMainDash() {
     if (window.confirm("Tem certeza que deseja remover este veículo?")) {
       try {
         await deletarVeiculo(_id);
+        toast.success("Veículo removido com sucesso!");
         await carregarVeiculos();
       } catch (err) {
-        alert("Erro ao deletar veículo", err);
+        toast.error(err.response?.data?.message || "Erro ao remover veículo. Tente novamente.");
       }
     }
   }
@@ -205,10 +207,11 @@ export default function StyledMainDash() {
 
   try {
     await atualizarVeiculo(id, { status: prox });
+    toast.success("Status atualizado com sucesso!");
     carregarVeiculos();
   } catch (err) {
     console.error(err);
-    alert("Erro ao atualizar status");
+    toast.error(err.response?.data?.message || "Erro ao atualizar status. Tente novamente.");
   }
 }
   useEffect(() => {
