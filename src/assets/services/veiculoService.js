@@ -13,7 +13,7 @@ export const listarVeiculos = async ({ limit = 5, offset = 0, search = "" }) => 
 };
 
 export const criarVeiculo = async (payload) => {
-  const { data } = await api.post("/veiculo", payload);
+  const { data } = await api.post("/veiculo/register", payload);
   return data;
 };
 

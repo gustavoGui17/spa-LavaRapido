@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components'
 import { Link } from "react-router-dom";
+import { useTheme } from "../../../../contexts/ThemeContext";
 
 const StyleHeader = styled.header`
   width: 100%;
@@ -70,6 +71,25 @@ const StyleNav = styled.nav`
   }
 `;
 
+const DarkToggleBtn = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 16px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;
+
 const Hamburger = styled.div`
   display: none;
   cursor: pointer;
@@ -89,6 +109,7 @@ const Hamburger = styled.div`
 
 export default function StyledNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isDark, toggleDark } = useTheme();
 
   return (
     <>
@@ -107,6 +128,9 @@ export default function StyledNavbar() {
             <Link to="/login">Login</Link>
           </ul>
         </StyleNav>
+        <DarkToggleBtn onClick={toggleDark}>
+          {isDark ? "☀️" : "🌙"}
+        </DarkToggleBtn>
       </StyleHeader>
     </>
   );

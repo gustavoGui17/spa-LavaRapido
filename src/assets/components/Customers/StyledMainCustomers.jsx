@@ -4,6 +4,7 @@ import styled from "styled-components";
 import StyledModalCustomers from "./StyledModalCustomers";
 import StyledCustomers from "./StyledCustomers";
 import { toast } from "react-toastify";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 const ModalClientes = StyledModalCustomers;
 
@@ -159,6 +160,7 @@ export default function StyledMainCustomers() {
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   const carregarCustomers = useCallback(async () => {
     try {
@@ -181,14 +183,12 @@ export default function StyledMainCustomers() {
   }, [limit, offset, search]);
 
   async function handleDeletar(_id) {
-    if (window.confirm("Tem certeza que deseja remover este cliente?")) {
-      try {
-        await deletarCustomer(_id);
-        toast.success("Cliente removido com sucesso!");
-        await carregarCustomers();
-      } catch (err) {
-        toast.error(err.response?.data?.message || "Erro ao remover cliente. Tente novamente.");
-      }
+    try {
+      await deletarCustomer(_id);
+      toast.success("Cliente removido com sucesso!");
+      await carregarCustomers();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Erro ao remover cliente. Tente novamente.");
     }
   }
 
@@ -202,14 +202,11 @@ export default function StyledMainCustomers() {
     return;
   }
 
-  const fluxo = ["ativo", "inativo"];
-  const prox = fluxo[fluxo.indexOf(customer.status) + 1];
-
-  if (!prox) return;
+  const prox = customer.status === "ativo" ? "inativo" : "ativo";
 
   try {
     await atualizarCustomer(id, { status: prox });
-    toast.success("Status atualizado com sucesso!");
+    toast.success(`Cliente ${prox === "ativo" ? "ativado" : "desativado"} com sucesso!`);
     carregarCustomers();
   } catch (err) {
     console.error(err);
@@ -303,7 +300,7 @@ export default function StyledMainCustomers() {
         totalPages={totalPages}
         onNextPage={nextPage}
         onPrevPage={prevPage}
-        onDelete={handleDeletar}
+        onDelete={(id) => setConfirmDelete(id)}
         onUpdateStatus={handleProximoStatus}
       />
 
@@ -311,6 +308,17 @@ export default function StyledMainCustomers() {
         open={openModal}
         onClose={() => setOpenModal(false)}
         onSuccess={carregarCustomers}
+      />
+
+      <ConfirmDialog
+        open={confirmDelete !== null}
+        title="Remover cliente"
+        message="Tem certeza que deseja remover este cliente? Esta ação não pode ser desfeita."
+        onConfirm={() => {
+          handleDeletar(confirmDelete);
+          setConfirmDelete(null);
+        }}
+        onCancel={() => setConfirmDelete(null)}
       />
     </StyledMain>
   );

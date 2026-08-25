@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../../services/authService";
-import { cadastrarUsuario } from "../../services/userService";
 import { toast } from "react-toastify";
 
 const StyledContainer = styled.div`
@@ -59,48 +58,17 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledToggleText = styled.p`
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: var(--color-dark-variant);
-
-  span {
-    color: #4facfe;
-    cursor: pointer;
-    font-weight: bold;
-  }
-`;
-
 export default function StyledLogin() {
-  const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (isLogin) {
-        const data = await loginUsuario({
-          email: formData.email,
-          password: formData.password
-        });
-
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        navigate("/dashboard");
-      } else {
-        await cadastrarUsuario(formData);
-        toast.success("Cadastro realizado com sucesso! Faça o login.");
-        setIsLogin(true);
-      }
+      const data = await loginUsuario({ email, password });
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/dashboard");
     } catch (error) {
       console.error("Erro na autenticação:", error);
       toast.error(error.response?.data?.message || "Erro ao processar requisição. Tente novamente.");
@@ -110,43 +78,24 @@ export default function StyledLogin() {
   return (
     <StyledContainer>
       <StyledFormWrapper>
-        <StyledTitle>{isLogin ? "Login" : "Cadastro"}</StyledTitle>
+        <StyledTitle>Login</StyledTitle>
         <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <StyledInput
-              type="text"
-              name="nome"
-              placeholder="Nome"
-              value={formData.nome}
-              onChange={handleChange}
-              required
-            />
-          )}
           <StyledInput
             type="email"
-            name="email"
             placeholder="E-mail"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <StyledInput
             type="password"
-            name="password"
-            autoComplete="new-password"
             placeholder="Senha"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <StyledButton type="submit">{isLogin ? "Entrar" : "Cadastrar"}</StyledButton>
+          <StyledButton type="submit">Entrar</StyledButton>
         </form>
-        <StyledToggleText>
-          {isLogin ? "Não tem conta?" : "Já possui conta?"}{" "}
-          <span onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? "Cadastre-se" : "Faça Login"}
-          </span>
-        </StyledToggleText>
       </StyledFormWrapper>
     </StyledContainer>
   );

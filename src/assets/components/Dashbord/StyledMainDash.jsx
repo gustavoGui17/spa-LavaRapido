@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ModalVeiculos from "./StyledModal";
 import StyledHistory from "./StyledHistory";
 import { toast } from "react-toastify";
+import ConfirmDialog from "../common/ConfirmDialog";
 
 const StyledMain = styled.main`
   margin-top: 1.4rem;
@@ -157,6 +158,7 @@ export default function StyledMainDash() {
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   const carregarVeiculos = useCallback(async () => {
     try {
@@ -179,14 +181,12 @@ export default function StyledMainDash() {
   }, [limit, offset, search]);
 
   async function handleDeletar(_id) {
-    if (window.confirm("Tem certeza que deseja remover este veículo?")) {
-      try {
-        await deletarVeiculo(_id);
-        toast.success("Veículo removido com sucesso!");
-        await carregarVeiculos();
-      } catch (err) {
-        toast.error(err.response?.data?.message || "Erro ao remover veículo. Tente novamente.");
-      }
+    try {
+      await deletarVeiculo(_id);
+      toast.success("Veículo removido com sucesso!");
+      await carregarVeiculos();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Erro ao remover veículo. Tente novamente.");
     }
   }
 
@@ -303,7 +303,7 @@ export default function StyledMainDash() {
         totalPages={totalPages}
         onNextPage={nextPage}
         onPrevPage={prevPage}
-        onDelete={handleDeletar}
+        onDelete={(id) => setConfirmDelete(id)}
         onUpdateStatus={handleProximoStatus}
       />
 
@@ -311,6 +311,17 @@ export default function StyledMainDash() {
         open={openModal}
         onClose={() => setOpenModal(false)}
         onSuccess={carregarVeiculos}
+      />
+
+      <ConfirmDialog
+        open={confirmDelete !== null}
+        title="Remover veículo"
+        message="Tem certeza que deseja remover este veículo? Esta ação não pode ser desfeita."
+        onConfirm={() => {
+          handleDeletar(confirmDelete);
+          setConfirmDelete(null);
+        }}
+        onCancel={() => setConfirmDelete(null)}
       />
     </StyledMain>
   );

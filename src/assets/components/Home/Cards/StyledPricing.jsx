@@ -3,67 +3,69 @@ import StyledCard from './StyledCard';
 
 const StyleSection = styled.section`
   text-align: center;
-  padding: 50px;
+  padding: 60px 20px;
+  background: var(--color-background);
 `;
 
 const StyleCardsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
   max-width: 1200px;
-  margin: 0 auto;
+  padding: 0 40px;
+  margin: 40px auto 0;
 `;
 
 export default function StyledPricing() {
-  
+
   const plans = [
   {
-    title: ' Lavagem simples ',
-    car: 'MOTOCICLETA',
-    bgColor: '#8bc34a',
-    price: 50.00, 
+    title: 'Simples',
+    car: 'Motocicleta',
+    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    price: 50.00,
     washing: 'Lavagem para motocicleta',
-    service:['Lavagem Exterior', 'Lavagem por fora'] 
+    service:['Lavagem Exterior', 'Lavagem por fora']
   },
-  { 
-    title: ' Lavagem basica ',
-    car: 'HETCH/SUV/CAMINHONETE',
-    bgColor: '#2196f3',
-    price: 50.00, 
+  {
+    title: 'Básica',
+    car: 'Hatch / SUV / Caminhonete',
+    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    price: 50.00,
     washing: 'Lavagem simples',
     service:['Lavagem Exterior', 'Lavagem por fora']
-   },
-  { 
-    title: ' Lavagem deluxe ',
-    car: 'HETCH/SUV/CAMINHONETE',
-    bgColor: '#fbc02d', 
-    price: 80.00, 
-    washing: 'Lavagem com cera',
-    service:['Lavagem Exterior', 'Lavagem por fora', 'Cera'] 
   },
-  { 
-    title: ' Lavagem ultimate ', 
-    car: 'HETCH/SUV/MOTO/CAMINHONETE',
-    bgColor: '#1976d2',
-    price: 100.00, 
+  {
+    title: 'Deluxe',
+    car: 'Hatch / SUV / Caminhonete',
+    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    price: 80.00,
+    washing: 'Lavagem com cera',
+    service:['Lavagem Exterior', 'Lavagem por fora', 'Cera']
+  },
+  {
+    title: 'Ultimate',
+    car: 'Hatch / SUV / Moto / Caminhonete',
+    gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+    price: 100.00,
     washing: 'Lavagem completa com polimento',
     service:['Lavagem Exterior', 'Lavagem por fora', 'Polimento']
   },
-  { 
-    title: ' Lavagem super ',
-    car: 'HETCH/SUV/CAMINHONETE',
-    bgColor: '#388e3c',
+  {
+    title: 'Super',
+    car: 'Hatch / SUV / Caminhonete',
+    gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
     price: 150.00,
     washing: 'Lavagem completa com polimento e cera',
-    service:['Lavagem Exterior', 'Lavagem por fora', 'Polimento', 'cera']
+    service:['Lavagem Exterior', 'Lavagem por fora', 'Polimento', 'Cera']
   },
-  { 
-    title: ' Lavagem premium ',
-    car: 'HETCH/SUV/CAMINHONETE/MOTOCICLETA',
-    bgColor: '#ff9800',
-    price: 250.00, 
+  {
+    title: 'Premium',
+    car: 'Hatch / SUV / Caminhonete / Moto',
+    gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
+    price: 250.00,
     washing: 'Lavagem detalhada',
-    service:['Lavagem Exterior', 'Lavagem por fora', 'Polimento', 'cera', 'Lavagem detalhada']
+    service:['Lavagem Exterior', 'Lavagem por fora', 'Polimento', 'Cera', 'Lavagem detalhada']
   }
 ];
 
@@ -80,7 +82,7 @@ export default function StyledPricing() {
             title={plan.title}
             car={plan.car}
             washing={plan.washing}
-            bgColor={plan.bgColor}
+            gradient={plan.gradient}
             price={plan.price}
             service={plan.service}
           />
