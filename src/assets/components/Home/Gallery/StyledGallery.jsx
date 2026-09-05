@@ -70,8 +70,8 @@ export default function StyledGallery() {
       <StyledHeader>
         <h2>Galeria</h2>
         <p>
-          Bem-vindo à Enricar, onde redefinimos a arte do cuidado com o carro com nossos
-          serviços incomparáveis de lavagem manual. Na Washmaster, acreditamos em mais
+          Bem-vindo à Lava Rápido, onde redefinimos a arte do cuidado com o carro com nossos
+          serviços incomparáveis de lavagem manual. No lava rapido, acreditamos em mais
           do que apenas limpar veículos.
         </p>
       </StyledHeader>

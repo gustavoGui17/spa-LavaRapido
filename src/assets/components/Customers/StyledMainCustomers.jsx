@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { listarCustomers, atualizarCustomer, deletarCustomer } from "../../services/customersService";
 import styled from "styled-components";
 import StyledModalCustomers from "./StyledModalCustomers";
+import StyledModalEditUser from "./StyledModalEditUser";
 import StyledCustomers from "./StyledCustomers";
 import { toast } from "react-toastify";
 import ConfirmDialog from "../common/ConfirmDialog";
@@ -161,6 +162,7 @@ export default function StyledMainCustomers() {
   const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [editUser, setEditUser] = useState(null);
 
   const carregarCustomers = useCallback(async () => {
     try {
@@ -302,11 +304,19 @@ export default function StyledMainCustomers() {
         onPrevPage={prevPage}
         onDelete={(id) => setConfirmDelete(id)}
         onUpdateStatus={handleProximoStatus}
+        onEdit={(customer) => setEditUser(customer)}
       />
 
       <ModalClientes
         open={openModal}
         onClose={() => setOpenModal(false)}
+        onSuccess={carregarCustomers}
+      />
+
+      <StyledModalEditUser
+        open={editUser !== null}
+        customer={editUser}
+        onClose={() => setEditUser(null)}
         onSuccess={carregarCustomers}
       />
 

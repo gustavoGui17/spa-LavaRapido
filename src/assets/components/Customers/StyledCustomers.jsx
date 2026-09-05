@@ -77,6 +77,7 @@ export default function StyledCustomers({
   items = [],
   onDelete,
   onUpdateStatus,
+  onEdit,
   totalPages,
   currentPage,
   onNextPage,
@@ -125,6 +126,15 @@ export default function StyledCustomers({
 
                 <td>
                   <Actions>
+                    <button onClick={() => onEdit(customer)} title="Editar usuário">
+                      <span
+                        className="material-symbols-outlined"
+                        style={{ color: "#3b82f6" }}
+                      >
+                        edit
+                      </span>
+                    </button>
+
                     <button onClick={() => onUpdateStatus(customer)}>
                       <span
                         className="material-symbols-outlined"

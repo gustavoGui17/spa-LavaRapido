@@ -5,7 +5,7 @@ const StyleCardWrapper = styled.div`
   background: ${({ gradient }) => gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
   padding: 40px 24px 24px;
   border-radius: 20px;
-  color: #ffffff;
+  color: black;
   width: 100%;
   max-width: 340px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);

@@ -9,3 +9,8 @@ export const cadastrarUsuario = async (dados) => {
   const response = await api.post("/user/register", payload);
   return response.data;
 };
+
+export const atualizarUsuario = async (id, dados) => {
+  const { data } = await api.patch(`/user/${id}`, dados);
+  return data;
+};

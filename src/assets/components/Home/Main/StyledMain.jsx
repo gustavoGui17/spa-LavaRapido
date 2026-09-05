@@ -73,13 +73,13 @@ export default function StyledMain() {
             </StyledImage>
 
             <StyledContent>
-                <StyledTitle>Sobre EnriCar</StyledTitle>
+                <StyledTitle>Sobre lava rapido</StyledTitle>
                 <StyledSubtitle>Lavagem manual e detalhamento de carros</StyledSubtitle>
 
-                <Styledtext>Bem-vindo à EnriCar, onde redefinimos a arte de cuidar de carros <br /> com nossos serviços incomparáveis de lavagem manual. Na EnriCar, <br /> acreditamos em mais do que apenas limpar veículos; acreditamos em <br /> realçar e preservar sua beleza, um detalhe meticuloso de cada vez.
+                <Styledtext>Bem-vindo à Lava Rápido, onde redefinimos a arte de cuidar de carros <br /> com nossos serviços incomparáveis de lavagem manual. Na Lava Rápido, <br /> acreditamos em mais do que apenas limpar veículos; acreditamos em <br /> realçar e preservar sua beleza, um detalhe meticuloso de cada vez.
                 </Styledtext>
 
-                <Styledtext>Na EnriCar, nossa missão não é apenas limpar carros; é elevar <br /> toda a experiência de cuidar de um carro. Somos movidos pela paixão, <br /> guiados pela integridade e dedicados a fazer cada veículo brilhar
+                <Styledtext>Na Lava Rápido, nossa missão não é apenas limpar carros; é elevar <br /> toda a experiência de cuidar de um carro. Somos movidos pela paixão, <br /> guiados pela integridade e dedicados a fazer cada veículo brilhar
                 </Styledtext>
 
                 <StyledHighlight>
@@ -87,9 +87,9 @@ export default function StyledMain() {
                 </StyledHighlight>
 
                 <StyledContact>
-                    <p>📍 Elizabeth Shopping Centre, Next To Coles, Adelaide, SA, Australia</p>
-                    <p>📞 +61 433 457 269</p>
-                    <p>📧 washmasterelizabeth@gmail.com</p>
+                    <p>📍 Av. Paulista, 1000 - Bela Vista, São Paulo - SP</p>
+                    <p>📞 +55 11 99999-9999</p>
+                    <p>📧 lava rapido@gmail.com</p>
                 </StyledContact>
             </StyledContent>
         </StyledContainer>

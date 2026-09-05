@@ -107,7 +107,7 @@ export default function StyledNavbarDash() {
       <StyledTop>
         <div>
           <h2>
-            Enri <span className="danger">car</span>
+            lava rapido <span className="danger">car</span>
           </h2>
         </div>
         <ThemeToggle />
@@ -127,13 +127,6 @@ export default function StyledNavbarDash() {
             <h3>Customers</h3>
           </a>
         )}
-
-        <a onClick={() => navigate("/settings")}>
-          <span className="material-symbols-outlined">
-            settings
-          </span>
-          <h3>Configuração</h3>
-        </a>
 
         <a onClick={handleLogout}>
           <span className="material-symbols-outlined">

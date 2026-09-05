@@ -45,7 +45,7 @@ const ContactButton = styled.a`
 export default function StyledBanner() {
   return (
     <StyleBanner id="Home">
-      <Title>Bem vindo ao EnriCar</Title>
+      <Title>Bem vindo ao lava rapido</Title>
       <Subtitle>Seu carro com limpeza total!</Subtitle>
       <ContactButton href="#Contato">📩 Contanto </ContactButton>
     </StyleBanner>

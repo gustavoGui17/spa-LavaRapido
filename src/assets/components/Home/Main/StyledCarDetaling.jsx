@@ -83,7 +83,7 @@ export default function StyledCarDetaling() {
 
   return (
     <StyledSection id="Galeria">
-      <StyledTitle>Carro detalhado em Osasco | Enricar</StyledTitle>
+      <StyledTitle>Carro detalhado| Lava Rápido</StyledTitle>
       <StyledGrid>
         {features.map((feature, index) => (
           <StyledCard key={index}>

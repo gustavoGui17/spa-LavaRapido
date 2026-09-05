@@ -57,12 +57,12 @@ export default function StyledMaps() {
       <InfoGrid>
         <InfoCard>
           <h4>📍 Endereço</h4>
-          <p>Elizabeth Shopping Centre, Next To Caltex, Adelaide, SA, Australia</p>
+          <p>Av. Paulista, 1000 - Bela Vista, São Paulo - SP</p>
         </InfoCard>
 
         <InfoCard>
           <h4>📞 Telefone e contato </h4>
-          <p>+61 433 457 269<br />washmasterselizabeth@gmail.com</p>
+          <p>11 99999-9999<br />lavarapido@gmail.com</p>
         </InfoCard>
 
         <InfoCard>

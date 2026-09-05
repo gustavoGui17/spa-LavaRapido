@@ -87,6 +87,19 @@ const Pagination = styled.div`
 `;
 
 export default function StyledHistory({ items = [], onDelete, onUpdateStatus, totalPages, currentPage, onNextPage, onPrevPage }) {
+  function formatDateTime(value) {
+    if (!value) return "—";
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return "—";
+    return d.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
   return (
     <>
       <div>
@@ -100,6 +113,8 @@ export default function StyledHistory({ items = [], onDelete, onUpdateStatus, to
               <th>Cor</th>
               <th>Tipo de lavagem</th>
               <th>Cliente</th>
+              <th>Cadastrado</th>
+              <th>Finalizado</th>
               <th className="status">Status</th>
               <th className="actions">Ações</th>
             </tr>
@@ -108,7 +123,7 @@ export default function StyledHistory({ items = [], onDelete, onUpdateStatus, to
           <tbody>
             {items.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center", padding: "40px" }}>
+                <td colSpan="9" style={{ textAlign: "center", padding: "40px" }}>
                   Nenhum registro encontrado
                 </td>
               </tr>
@@ -120,6 +135,8 @@ export default function StyledHistory({ items = [], onDelete, onUpdateStatus, to
                   <td>{item.cor}</td>
                   <td>{item.tipoLavagem}</td>
                   <td>{item.nomeCliente}</td>
+                  <td>{formatDateTime(item.entryDate)}</td>
+                  <td>{formatDateTime(item.finishedAt)}</td>
 
                   <td className="status">
                     <Status value={item.status}>{item.status}</Status>
