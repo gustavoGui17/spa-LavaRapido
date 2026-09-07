@@ -47,7 +47,6 @@ export default function StyledBanner() {
     <StyleBanner id="Home">
       <Title>Bem vindo ao lava rapido</Title>
       <Subtitle>Seu carro com limpeza total!</Subtitle>
-      <ContactButton href="#Contato">📩 Contanto </ContactButton>
     </StyleBanner>
   );
 }
