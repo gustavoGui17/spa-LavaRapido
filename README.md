@@ -1,8 +1,8 @@
-# 💧 Lava Rápido — Frontend (SPA)
+# Lava Rápido — Frontend (SPA)
 
 Interface web (SPA) do sistema de gerenciamento de um lava rápido. Inclui uma landing page institucional, autenticação, painel do usuário (dashboard) e área administrativa de clientes, com animações de transição e sistema de temas de cores.
 
-## ✨ Visão geral
+## Visão geral
 
 | Feature | Descrição |
 |---------|-----------|
@@ -12,7 +12,7 @@ Interface web (SPA) do sistema de gerenciamento de um lava rápido. Inclui uma l
 | Clientes (admin) | CRUD de clientes com busca, cadastro e edição |
 | Temas | 5 cores primárias + modo claro/escuro |
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 - **React 19 + Vite** — SPA
 - **React Router DOM v7** — navegação e rotas protegidas
@@ -25,7 +25,7 @@ Interface web (SPA) do sistema de gerenciamento de um lava rápido. Inclui uma l
 - **@emailjs/browser** — envio de e-mails direto do frontend
 - **react-scroll** — rolagem suave na landing page
 
-## 📦 Instalação
+## Instalação
 
 ```bash
 # clone o repositório
@@ -36,7 +36,7 @@ cd spa-LavaRapido
 npm install
 ```
 
-## ▶️ Como rodar
+##  Como rodar
 
 ```bash
 npm run dev        # ambiente de desenvolvimento (Vite)
@@ -47,7 +47,7 @@ npm run lint       # verificação de lint (ESLint)
 
 O servidor de desenvolvimento roda em `http://localhost:5173`.
 
-## ⚙️ Integração com a API
+## Integração com a API
 
 O frontend consome a API do projeto **[API-LavaRapido](https://github.com/gustavoGui17/API-LavaRapido)**.
 
@@ -76,7 +76,7 @@ export default api;
 | `customersService.js` | CRUD de clientes |
 | `veiculoService.js` | Veículos e lavagens |
 
-## 🗺️ Rotas
+## Rotas
 
 | Rota | Descrição | Acesso |
 |------|-----------|--------|
@@ -92,7 +92,7 @@ export default api;
 - **`ProtectedRoute`** — exige usuário autenticado. Consulta a API (`/auth/me`) e, se a conta do cliente estiver **inativa**, bloqueia o acesso exibindo um aviso.
 - **`AdminRoute`** — exige papel de **administrador**; caso contrário, redireciona para o dashboard.
 
-## 🎨 Sistema de temas
+## Sistema de temas
 
 Controlado pelo contexto global `ThemeContext` (`src/contexts/ThemeContext.jsx`), com persistência em `localStorage`:
 
@@ -100,7 +100,7 @@ Controlado pelo contexto global `ThemeContext` (`src/contexts/ThemeContext.jsx`)
 - **Modo claro/escuro**, aplicado via classe `dark-theme-variables` no `body`.
 - Disponibiliza `useTheme()` com `themeName`, `changeTheme`, `isDark`, `toggleDark` e `themes`.
 
-## 🏗️ Estrutura do projeto
+## Estrutura do projeto
 
 ```
 spa-LavaRapido/
@@ -126,7 +126,7 @@ spa-LavaRapido/
         └── img/                 # imagens e galeria
 ```
 
-## 👤 Funcionalidades
+## Funcionalidades
 
 - **Landing page** — apresentação do serviço com preços, galeria e localização.
 - **Autenticação** — login com cookie de sessão via API, logout e bloqueio de conta inativa.
@@ -134,6 +134,6 @@ spa-LavaRapido/
 - **Clientes (admin)** — CRUD de clientes com busca, cadastro e edição.
 - **Tema** — alternância de cor primária e modo claro/escuro via contexto global.
 
-## 📄 Licença
+## Licença
 
 Projeto privado — licença não especificada.
