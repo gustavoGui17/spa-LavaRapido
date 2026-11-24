@@ -1,8 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { listarVeiculos, atualizarVeiculo, deletarVeiculo } from "../../services/veiculoService";
+import {
+  listarAgendamentosDashboard,
+  finalizarAgendamento,
+} from "../../services/agendamentosService";
 import styled from "styled-components";
 import ModalVeiculos from "./StyledModal";
-import StyledHistory from "./StyledHistory";
+import StyledHistory, { StyledAgendamentos } from "./StyledHistory";
 import { toast } from "react-toastify";
 import ConfirmDialog from "../common/ConfirmDialog";
 
@@ -159,10 +163,11 @@ export default function StyledMainDash() {
   const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [agendamentos, setAgendamentos] = useState([]);
 
-  const carregarVeiculos = useCallback(async () => {
+  const carregarVeiculos = useCallback(async ({ silencioso = false } = {}) => {
     try {
-      setLoading(true);
+      if (!silencioso) setLoading(true);
 
       const response = await listarVeiculos({
         limit,
@@ -176,9 +181,20 @@ export default function StyledMainDash() {
     } catch (error) {
       console.error("Erro ao carregar veículos", error);
     } finally {
-      setLoading(false);
+      if (!silencioso) setLoading(false);
     }
   }, [limit, offset, search]);
+
+  const carregarAgendamentos = useCallback(async ({ silencioso = false } = {}) => {
+    try {
+      const response = await listarAgendamentosDashboard();
+      setAgendamentos(response.results || []);
+    } catch (error) {
+      if (!silencioso) {
+        console.error("Erro ao carregar agendamentos", error);
+      }
+    }
+  }, []);
 
   async function handleDeletar(_id) {
     try {
@@ -190,7 +206,24 @@ export default function StyledMainDash() {
     }
   }
 
- async function handleProximoStatus(veiculo) {
+  async function handleFinalizarAgendamento(agendamento, motivo) {
+    const id = agendamento?._id || agendamento?.id;
+    if (!id) return;
+
+    try {
+      await finalizarAgendamento(id, motivo);
+      toast.success("Agendamento finalizado e cliente notificado!");
+      await carregarAgendamentos();
+      await carregarVeiculos({ silencioso: true });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message ||
+          "Erro ao finalizar o agendamento. Tente novamente."
+      );
+    }
+  }
+
+  async function handleProximoStatus(veiculo) {
   if (!veiculo) return;
   
   const id = veiculo._id || veiculo.id;
@@ -208,7 +241,10 @@ export default function StyledMainDash() {
   try {
     await atualizarVeiculo(id, { status: prox });
     toast.success("Status atualizado com sucesso!");
-    carregarVeiculos();
+    await carregarVeiculos();
+    if (prox === "finalizado") {
+      await carregarAgendamentos();
+    }
   } catch (err) {
     console.error(err);
     toast.error(err.response?.data?.message || "Erro ao atualizar status. Tente novamente.");
@@ -216,7 +252,21 @@ export default function StyledMainDash() {
 }
   useEffect(() => {
     carregarVeiculos();
-  }, [carregarVeiculos]);
+    carregarAgendamentos();
+
+    const atualizar = () => {
+      carregarVeiculos({ silencioso: true });
+      carregarAgendamentos({ silencioso: true });
+    };
+
+    const interval = setInterval(atualizar, 15000);
+    window.addEventListener("focus", atualizar);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", atualizar);
+    };
+  }, [carregarVeiculos, carregarAgendamentos]);
 
   const totalVeiculos = total;
 
@@ -296,6 +346,11 @@ export default function StyledMainDash() {
           Pesquisar
         </button>
       </SearchContainer>
+
+      <StyledAgendamentos
+        items={agendamentos}
+        onFinalizar={handleFinalizarAgendamento}
+      />
 
       <StyledHistory
         items={veiculos}

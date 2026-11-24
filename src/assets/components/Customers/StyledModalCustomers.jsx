@@ -1,6 +1,9 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { criarCustomers } from "../../services/customersService";
+import {
+  buscarCoordenadasPorEndereco,
+  buscarEnderecoPorCep,
+} from "../../services/enderecoService";
 import styled, { keyframes } from "styled-components";
 import { toast } from "react-toastify";
 
@@ -25,6 +28,8 @@ const StyledModalBox = styled.div`
   padding: 32px;
   width: 560px;
   max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
   animation: ${fadeIn} 0.25s ease;
   position: relative;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
@@ -38,6 +43,13 @@ const StyledModalContainer = styled.div`
   h2 {
     margin: 0 0 4px;
     font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-dark);
+  }
+
+  h3 {
+    margin: 6px 0 0;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-dark);
   }
@@ -88,6 +100,16 @@ const StyledSelect = styled.select`
 const GridTwoCols = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 18px;
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const GridThreeCols = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 
   @media (max-width: 500px) {
@@ -153,6 +175,13 @@ const [documentoTipo, setDocumentoTipo] = useState("cnpj");
 const [documento, setDocumento] = useState("");
 const [contato, setContato] = useState("");
 const [status] = useState("ativo");
+const [cep, setCep] = useState("");
+const [logradouro, setLogradouro] = useState("");
+const [numero, setNumero] = useState("");
+const [bairro, setBairro] = useState("");
+const [cidade, setCidade] = useState("");
+const [estado, setEstado] = useState("");
+const [carregandoCep, setCarregandoCep] = useState(false);
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -161,6 +190,43 @@ const [status] = useState("ativo");
     if (open) document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
+
+  useEffect(() => {
+    const cepLimpo = cep.replace(/\D/g, "");
+    if (cepLimpo.length !== 8) {
+      return undefined;
+    }
+
+    let cancelado = false;
+    setCarregandoCep(true);
+
+    buscarEnderecoPorCep(cepLimpo)
+      .then((endereco) => {
+        if (cancelado) return;
+        if (!endereco) {
+          toast.warning("CEP não encontrado.");
+          return;
+        }
+        setLogradouro(endereco.logradouro);
+        setBairro(endereco.bairro);
+        setCidade(endereco.cidade);
+        setEstado(endereco.estado);
+      })
+      .catch(() => {
+        if (!cancelado) {
+          toast.error("Não foi possível consultar o CEP.");
+        }
+      })
+      .finally(() => {
+        if (!cancelado) {
+          setCarregandoCep(false);
+        }
+      });
+
+    return () => {
+      cancelado = true;
+    };
+  }, [cep]);
 
   if (!open) return null;
 
@@ -188,6 +254,13 @@ const [status] = useState("ativo");
     return value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d+)/, "$1.$2.$3/$4-$5");
   }
 
+  function maskCep(value) {
+    const digits = value.replace(/\D/g, "").slice(0, 8);
+    return digits.length > 5
+      ? digits.replace(/(\d{5})(\d+)/, "$1-$2")
+      : digits;
+  }
+
   function handleDocumentoTipoChange(tipo) {
     setDocumentoTipo(tipo);
     setDocumento("");
@@ -207,7 +280,13 @@ const [status] = useState("ativo");
       !confirmPassword ||
       !nomeFantasia ||
       !documento ||
-      !contato
+      !contato ||
+      !cep ||
+      !logradouro ||
+      !numero ||
+      !bairro ||
+      !cidade ||
+      !estado
     ) {
       toast.warning("Preencha todos os campos obrigatórios.");
       return;
@@ -223,6 +302,28 @@ const [status] = useState("ativo");
       return;
     }
 
+    let coordenadas = null;
+
+    try {
+      coordenadas = await buscarCoordenadasPorEndereco({
+        logradouro,
+        numero,
+        bairro,
+        cidade,
+        estado,
+        cep,
+      });
+    } catch (error) {
+      console.error("Erro ao localizar endereço:", error);
+    }
+
+    if (!coordenadas) {
+      toast.error(
+        "Não foi possível localizar o endereço informado. Verifique os dados e tente novamente."
+      );
+      return;
+    }
+
     try {
       const novoCustomer = {
         name,
@@ -233,6 +334,18 @@ const [status] = useState("ativo");
         documentoTipo,
         contato,
         status,
+        endereco: {
+          cep: cep.replace(/\D/g, ""),
+          logradouro,
+          numero,
+          bairro,
+          cidade,
+          estado: estado.toUpperCase(),
+        },
+        location: {
+          type: "Point",
+          coordinates: [coordenadas.longitude, coordenadas.latitude],
+        },
       };
 
       await criarCustomers(novoCustomer);
@@ -248,6 +361,12 @@ const [status] = useState("ativo");
       setNomeFantasia("");
       setDocumento("");
       setContato("");
+      setCep("");
+      setLogradouro("");
+      setNumero("");
+      setBairro("");
+      setCidade("");
+      setEstado("");
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
       toast.error(error.response?.data?.message || "Erro ao cadastrar cliente. Tente novamente.");
@@ -351,6 +470,68 @@ const [status] = useState("ativo");
               inputMode="numeric"
             />
           </Field>
+
+          <h3>Endereço do lava rápido</h3>
+
+          <GridTwoCols>
+            <Field>
+              <Label>CEP{carregandoCep && " (buscando...)"}</Label>
+              <StyledInput
+                value={cep}
+                onChange={(e) => setCep(maskCep(e.target.value))}
+                placeholder="00000-000"
+                inputMode="numeric"
+              />
+            </Field>
+
+            <Field>
+              <Label>Número</Label>
+              <StyledInput
+                value={numero}
+                onChange={(e) => setNumero(e.target.value)}
+                placeholder="123"
+              />
+            </Field>
+          </GridTwoCols>
+
+          <Field>
+            <Label>Logradouro</Label>
+            <StyledInput
+              value={logradouro}
+              onChange={(e) => setLogradouro(e.target.value)}
+              placeholder="Rua, avenida..."
+            />
+          </Field>
+
+          <GridThreeCols>
+            <Field>
+              <Label>Bairro</Label>
+              <StyledInput
+                value={bairro}
+                onChange={(e) => setBairro(e.target.value)}
+                placeholder="Bairro"
+              />
+            </Field>
+
+            <Field>
+              <Label>Cidade</Label>
+              <StyledInput
+                value={cidade}
+                onChange={(e) => setCidade(e.target.value)}
+                placeholder="Cidade"
+              />
+            </Field>
+
+            <Field>
+              <Label>Estado</Label>
+              <StyledInput
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                placeholder="SP"
+                maxLength={2}
+              />
+            </Field>
+          </GridThreeCols>
 
           <GridTwoCols>
             <Field>
