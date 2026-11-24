@@ -133,7 +133,3 @@ spa-LavaRapido/
 - **Dashboard** — visualização e acompanhamento das lavagens do usuário.
 - **Clientes (admin)** — CRUD de clientes com busca, cadastro e edição.
 - **Tema** — alternância de cor primária e modo claro/escuro via contexto global.
-
-## Licença
-
-Projeto privado — licença não especificada.
